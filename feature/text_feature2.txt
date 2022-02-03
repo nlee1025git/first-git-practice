@@ -1,3 +1,7 @@
 Hello this is for tracking feature2
+<<<<<<< HEAD
 on local number ways changed:q
 
+=======
+added cheange for 3way
+>>>>>>> fb08ef4bbb21d79f6c3f5b4064d9768977079400
