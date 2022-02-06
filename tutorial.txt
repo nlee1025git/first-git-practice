@@ -1,0 +1,1007 @@
+one location is https://github.com/nlee1025/Awk.git
+
+
+#add short cut for followin : .bashrc
+#===================================================
+#[repo cmd] print commit history
+            alias glog="git log "
+
+#[modify cmd] print commit history
+            alias gls="git ls-files "
+
+#[file cmd] print commit history
+            alias gstat="git status "
+alias gf="git cat-file -p "
+alias b="cd ..; ls"
+alias bb="cd ../..; ls"
+alias bbb="cd ../../..; ls"
+alias bbbb="cd ../../../..; ls"
+alias bbbbb="cd ../../../../..; ls"
+alias m="cd -;  ls"
+
+
+
+#cat ~/.gitconfig
+git config --global user.name "Chris Chu"
+git config --global user.email jchu02.githubber@yahoo.com
+#git config --global core.editor "code --wait"
+#git config --global core.editor vim
+git config --global -e
+git config --global core.autocrlf input  #for linux
+git config --global core.autocrlf true   #for window
+git config --global user.signingkey <gpg-key-id>
+git tag -s <tag-name>
+
+
+
+making new git project
+mkdir a-new-project
+cd a-new-project
+git init
+ls -a
+git config --global user.name "Chris Chu"
+git config --global user.email jchu02.githubber@yahoo.com
+
+#simple
+==========================================================================
+---repo creation----------------------------------------------------------
+                 git init "creates .git directory
+==========================================================================
+
+==========================================================================
+---web--------------------------------------------------------------------
+==========================================================================
+
+==========================================================================
+                 git push
+                 --------------------------------------------------------
+                 git clone <weblink>
+                 git branch -r               "to look at origin branches
+                 git checkout <branch name>  "without origin...
+                 git branch -vv              "to check tracking branches
+                 git pull
+---local repo-------------------------------------------------------------
+                 git branch -b feature-1
+                 git branch -vv               "to look web and current repo
+                 git read-tree  <tree_hash>  "download tree from repo to stage
+==========================================================================
+
+==========================================================================
+                 git commit -m "msg"
+---staging repo-----------------------------------------------------------
+                 git ls-files
+                 git restore --staged <files> "if file is deleted from staged area
+                 
+                 git checkout-index -a        "down load to work directory
+==========================================================================
+
+
+========================================================================== 
+                 git add filename
+                 git status
+                 git status -s
+---work directory---------------------------------------------------------
+==========================================================================
+
+==========================================================================
+---util-------------------------------------------------------------------
+                 git difftool
+                 git log
+                 git log --oneline --all --graph   "give graphic
+==========================================================================
+
+
+
+#Basic work flow
+  1. create a new repository
+  2. work directory
+  3. clone a snap shot
+  3.1. add new file
+  4. statging area then commit
+  5. unstaing and through away
+  6. add to put it in
+  7. git commit -m 'initial statement'
+  8. history show the change
+  9. change file add file1
+  10. git commit -m "fixed bug"
+  11 remove file 2
+  12. git add file2
+  13. git commit -m "removed file2"
+
+#complex
+
+Command summary
+                "https//docs.github.com/en/get-started/getting-started-with-git/managing-remote-repositories
+==========================================================================
+---repo creation----------------------------------------------------------
+                 git init "creates .git directory
+==========================================================================
+
+==========================================================================
+---web--------------------------------------------------------------------
+                 creating a personal access token
+                 github.com>setting>developer setting>personal access tokens
+                 generate new tokens> add description for token> expiration
+                 check on repo> generate token
+                 Using a token on command line
+                 git clone https://github.com/username/repo.git > user/pass
+
+==========================================================================
+
+==========================================================================
+                 git push
+                 --------------------------------------------------------
+                 git clone <weblink>
+                 git branch -r               "to look at origin branches
+                 git checkout <branch name>  "without origin...
+                 -----------do this first on above-----------------------
+                 clone copy or clone a different repository
+                 remote is used to refer to a remote repo or your centural repo-
+                 NOTE: remote doesn't download unless fetch/pull
+                 ex) git remote add foo git@github.com:username/projectname.git
+                     git fetch --all; git checkout -b foo_branch foo/feature22
+                 1. git clone REMOTEURL foo
+                 2. mkdir foo, cd foo, git init, git remote add origin REMOTEURL
+                    git pull origin master
+                 -- Specify that the GitHub repository is the origin for this repository:
+                 git remote add origin git@github.com:username/projectname.git
+                 git remote -v               "verify
+                 > origin https://github.com/user/repo.git (fetch)
+                 > origin https://github.com/user/repo.git (push)
+                 # note if remote already exist...
+                 git remote rename origin destination
+                 git remote -v               "verify
+                 > destination https://github.com/user/repo.git (fetch)
+                 > destination https://github.com/user/repo.git (push)
+                 git remote  rm              "or rm desination.
+                 git remote  set-url         "changing remote url
+
+                 -- Push your local files to the GitHub repository:
+                 git push -u origin master
+---local repo-------------------------------------------------------------
+                 git branch -b feature-1
+                 git branch -vv               "to look web and current repo
+                 git push -u origin feture-1  "Note: make link to Github
+                 git checkout feature-1       "to switch other branch
+                 git checkout main/master     "Note:merge step
+                 git merge feature-1
+                 git push
+                 git branch -d feature-1       "delete branch
+                 Note: if you pull a branch down on another machine,
+                 it may not be able to synchronize changes by just doing
+                 git pull and git push. If this is the case, simply type:
+                     git pull origin feature-1
+                     git push -u origin feature-1
+                 Once you have done that you should just be able to do
+                 git pull and git push.
+                 I think it need to understand tracking
+                 check with git branch -vv
+
+                 NOTE:TAG
+                 git tag taglabel            "Create a tag for your current code (e.g. a version number)
+                 git push --tags             "(where taglabel is a label such as ‘v1.0’)
+                 -- Create a release (with a ZIP file and a gzipped tar file for download) on GitHub.
+                 -- Obtain a list of changes from the previous tagged version for use in the release
+                 information using:
+                 git shortlog oldtaglabel..HEAD
+                 (where oldtaglabel is a tag or commit identifier of an earlier version).
+                 NOTE: unzip download .git objest...
+                 git unpack-file
+                 > cat .git/refs/heads/master 6916ae52c0b20b04569c262275d27422fc4fcd34
+                 > git cat-file -t 6916ae     commit
+                 > git cat-file -p 6916ae     tree fa388
+                 > git cat-file -p fa3887 i   README.md "blob <<<9670c>>>f17d  README.md"
+                 > git cat-file -p 9670c      .git/objects/info/packs
+                 > cat .git/objects/info/packs
+                   P pack-e38660e6be24bb79d8d929ddea3d194e0dd3cd13.pack
+                 > ls .git/objects/pack/ pack-e38660e6be24bb79d8d929ddea3d194e0dd3cd13.pack
+
+                 git read-tree  <tree_hash>  "download tree from repo to stage
+                 NOTE: to make tree "use nano editor for <TAB>
+                 echo  -e "blob 30\0Second file in Git repository"> file1.txt
+                 echo  -e "blob 30\0Second file in Git repository"> file1.txt
+                 find .git/objects -type f    "verify the object is saved in .git
+==========================================================================
+
+==========================================================================
+                 git commit -m "msg"
+---staging repo-----------------------------------------------------------
+                 git checkout -- filename      "Undo an uncommitted change to one file
+                 git reset --hard              "Undo all uncommitted changes
+                 git revert commitid           "Undo a commit
+                 git checkout commitid -- filename  "Obtain an older version of a specific file
+==========================================================================
+
+
+==========================================================================
+                 git add filename
+---work directory---------------------------------------------------------
+==========================================================================
+
+
+==========================================================================
+---util-------------------------------------------------------------------
+                 NOte: looking at differnces btwn current version and spec commit
+                 git diff
+                 git diff comit-hash
+                 git diff comit-hash comit-hash
+                 git diff branch-name
+                 git difftool
+                 git log
+                 git log --oneline --all --graph
+==========================================================================
+
+
+
+
+"{{{1 Creating a local git repository
+                   -- Create a directory for your repository:
+                   mkdir -p ~/git/projectname
+                   -- Initialize git for that repository:
+                   cd ~/git/projectname
+                   git init
+                   -- Copy or create files that you wish to track with Git
+                   -- Add these so that Git knows they are to be tracked
+                   git add filename
+                   git commit -a -m "message"
+"}}}
+"{{{2 Synchronizing your local repository with GitHub
+-- Specify that the GitHub repository is the origin for this repository:
+git remote add origin git@github.com:username/projectname.git
+-- Push your local files to the GitHub repository:
+git push -u origin master
+"}}}
+"{{{3 Changing and adding files
+-- If you change a file, then you must commit the change and push to GitHub:
+git commit -a -m "message"
+git push
+-- If you create a new file, then you must add it to Git, commit it and push to
+GitHub:
+git add filename
+git commit -a
+git push
+"}}}
+"{{{4 Looking at differences
+-- Look at differences between current versions of files and the most recent commit:
+git diff
+-- Look at differences between the current version and a specified commit:
+git diff commitid
+-- Look at differences between two specified commits:
+git diff commitid1 commitid2
+-- Look at differences between the current version and another branch:
+git diff branchname
+23
+In any of these cases, if you are only interested in a particular file, just add the filename
+on the end as well.
+"}}}
+"{{{5 Check out a repository from GitHub
+-- Create a clone of your repository from GitHub:
+git clone git@github.com:username/projectname.git
+-- Pull down changes that have been made to the GitHub repository: git pull
+-- If you change your copy and the copy on GitHub has changed in the mean time,
+you won’t be able to push your changes. You will have to git pull the repository which will merge the changes with your local changes. This will happen
+automatically unless the changes are in the same part of the file. In this case you
+will have to resolve the conflicts manually.
+"}}}
+"{{{6 Creating branches for developing and testing new features
+-- Create a new branch named feature and switch to it using:
+git checkout -b feature
+(you only need the -b when creating the branch)
+-- Link the branch to GitHub:
+git push -u origin feature
+-- Switch back to the ‘master’ branch:
+git checkout master
+-- Merge the branch into the main version:
+git checkout master
+git merge feature
+git push
+-- Delete the feature branch
+git branch -d feature
+git push origin -delete feature
+Note: if you pull a branch down on another machine, it may not be able to synchronize changes by just doing git pull and git push. If this is the case, simply
+type:
+git pull origin feature
+git push -u origin feature
+Once you have done that you should just be able to do git pull and git push.
+"}}}
+"{{{7 Undoing changes
+-- Undo an uncommitted change to one file:
+git checkout -- filename
+-- Undo all uncommitted changes:
+git reset --hard
+24
+-- Undo a commit:
+git revert commitid
+(where commitid is the commit identifier obtained from git log).
+-- Obtain an older version of a specific file:
+git checkout commitid -- filename
+(where commitid is the commit identifier obtained from git log).
+"}}}
+"{{{8 Tags and releases
+-- Create a tag for your current code (e.g. a version number)
+git tag taglabel
+git push --tags
+(where taglabel is a label such as ‘v1.0’).
+-- Create a release (with a ZIP file and a gzipped tar file for download) on GitHub.
+-- Obtain a list of changes from the previous tagged version for use in the release
+information using:
+git shortlog oldtaglabel..HEAD
+(where oldtaglabel is a tag or commit identifier of an earlier version).
+
+"{{{19 Other tutorials
+You are also recommended to look at some of these for more information:
+-- https://guides.github.com/activities/hello-world/
+— A short overview from GitHub
+-- https://try.github.io/
+— An online interactive tutorial from GitHub.
+-- https://www.tutorialspoint.com/git/
+— An excellent introductory tutorial
+-- https://www.codecademy.com/learn/learn-git
+— Another excellent introductory tutorial
+-- https://git-scm.com/docs/gittutorial
+— A fairly long overview tutorial
+-- http://www.vogella.com/tutorials/Git/article.html
+— A fairly long detailed tutorial
+Note that these tutorials may suggest different ways of doing things from what has
+been presented above. I have shoown you what works for me!
+
+
+
+
+
+
+how to extract a single file with its history from a git repository
+These steps show two less common interactions with git to extract a single file
+which is inside a subfolder from a git repository. These steps essentially reduce
+the repository to just the desired files and should performed on a copy of
+the original repository (1.).
+
+First the repository is reduced to just the subfolder containing the files in
+question using git filter-branch --subdirectory-filter (2.) which is a useful
+step by itself if just a subfolder needs to be extracted. This step moves
+the desired files to the top level of the repository.
+
+Finally all remaining files are listed using git ls, the files to keep are removed
+from that using grep -v and the resulting list is passed to git rm which is invoked
+by git filter-branch --index-filter (3.). A bit convoluted but it does the trick.
+1. copy the repository to extract the file from and go to the desired branch
+                       git clone git@github.com:ssp/pazpar2.git pazpar2g
+                       Cloning into pazpar2g...
+                       /tmp  cd pazpar2g
+                       pazpar2g git:(master) git checkout ssp
+                       Branch ssp set up to track remote branch ssp from origin.
+                       Switched to a new branch 'ssp'
+2. reduce the repository to just the subfolder »etc« which contains the interesting file(s)
+                       (ssp) git filter-branch --prune-empty --subdirectory-filter etc -- --all
+                       Rewrite b3d4f2a89fdee662fb43122990fc28aa2c08bee5 (558/558)
+                       Ref 'refs/heads/master' was rewritten
+                       Ref 'refs/heads/ssp' was rewritten
+                       Ref 'refs/remotes/origin/master' was rewritten
+                       WARNING: Ref 'refs/remotes/origin/master' is unchanged
+                       Ref 'refs/remotes/origin/ssp' was rewritten
+                       Ref 'refs/tags/wildcard-matching' was rewritten
+3. remove all files other than the ones you want to keep (tmarc.xsl, check-pazpar2.xsl)
+                       (ssp)  git filter-branch -f --prune-empty --index-filter 'git rm --cached \
+                              --ignore-unmatch $(git ls-files | grep -v "tmarc.xsl\|check-pazpar2.sh")'
+                       Rewrite f06a533323ad8257efa9e52c45ad2e22e2b09b1c (1/558)rm 'bibs.pz'
+                       … [lenghty output omitted]
+                       Ref 'refs/heads/ssp' was rewritten
+                       (ssp) ls -l
+
+                       -rwxrwxr-x 1 ssp ssp  1359 2012-01-23 14:03 check-pazpar2.sh
+                       -rw-rw-r-- 1 ssp ssp 41078 2012-01-23 14:03 tmarc.xsl
+
+The hard way
+As mentioned before, our intentation was to see if there’s a way to download the repository
+without directory listing. For this, you have to dig a bit into the git-internals to understand
+how git is managing the repository.
+
+We won’t go into too much detail here - we recommend the appropiate chapters on git-scm.com/book
+for interested readers -, but basically there are three kind of objects in a git repository:
+                       Blob - The actual data (e.g. sourcecode)
+                       Tree - Grouping blobs together
+                       Commit - A specific state of a tree with more meta information (e.g. author/date/message)
+All these together are used by git under the hood to maintain the repository. However, the problem
+that we face is, that these objects are stored as .git/objects/[First-2-bytes]/[Last-38-bytes] files,
+where [First-2-bytes][Last-38-bytes] is the SHA1-hash of the object. We need to be smart and guess/extract
+the filenames of all objects to completely restore the repository, because brute forcing the SHA1 keyspace
+isn’t a good idea as it would be too time consuming.
+
+What helps us a lot is the fact that there are some standard files in a git repository:
+                       HEAD                       refs/heads/master
+                       objects/info/packs         refs/remotes/origin/HEAD
+                       description                refs/stash
+                       config                     logs/HEAD
+                       COMMIT_EDITMSG             logs/refs/heads/master
+                       index                      logs/refs/remotes/origin/HEAD
+                       packed-refs                info/refs
+                                                  info/exclude
+These files either refer an object by its hash or another file referencing an object and so on.
+Thus the easiest way is to start with downloading and parsing the aforementioned files. We need
+to parse these to continue to download the object files.
+
+So for example, we have downloaded the refs/heads/master file:
+> cat .git/refs/heads/master
+6916ae52c0b20b04569c262275d27422fc4fcd34
+The reference master points to a commit with the hash 6916a. After downloading the commit-object
+from the server (note the url should be .git/objects/69/16ae52c0b20b04569c262275d27422fc4fcd34),
+we can analyse it further:
+
+> git cat-file -t 6916ae
+commit
+This tells us, that the <<<downloaded object>> is indeed a commit. Let’s get some details about it:
+> git cat-file -p 6916ae52c0b20b04569c262275d27422fc4fcd34
+tree fa3887a0b798346c122afdd7c5ecc605bf3c18c0
+parent 9264d57c621f66208d689ef653ce8a62c3bccfae
+author XY <foo@bar> 1429391394 +0200
+committer XY <foo@bar> 1429391394 +0200
+
+Added another readme file
+Okay, now we know the hash of the related tree and parent object as well as some information about the author, the committer and the commit message.
+
+We download the tree-object and analyse it:
+> git cat-file -p fa3887a0b798346c122afdd7c5ecc605bf3c18c0
+                    040000 tree 532fc6055e09e0a2d5602f4b84c0dbadce1b5f3e        Dumper
+                    040000 tree 077ce769dedcf19d0f063246256e8ae0394fd8df        Extractor
+                    040000 tree d6e1bd4677a256e760cce5ddaa7db7ea6f9a8900        Finder
+                    100644 blob <<<9670c>>>f17dfeec351c395493058044b9f9dadbe2a        README.md
+This tells us which files are stored in that tree. Note that Dumper, Extractor and Finder are
+also trees (directories). The final step is to download the README.md blob object and cat its content:
+> git cat-file -p 9670cf17dfeec351c395493058044b9f9dadbe2a
+Git Tools
+=============
+[...]
+We need to take special care of packed files. We can find a list of all packs in .git/objects/info/packs
+> cat .git/objects/info/packs
+P pack-e38660e6be24bb79d8d929ddea3d194e0dd3cd13.pack
+The appropiate pack file is stored in .git/objects/pack/:
+> /usr/bin/ls .git/objects/pack/
+pack-e38660e6be24bb79d8d929ddea3d194e0dd3cd13.idx
+pack-e38660e6be24bb79d8d929ddea3d194e0dd3cd13.pack
+In that case, we need to download both files and then run the following command to extract the packed data:
+
+> git unpack-objects -r < .git/objects/pack/pack-e38660e6be24bb79d8d929ddea3d194e0dd3cd13.pack
+Unpacking objects: 100% (15/15), done.
+As you can see, by doing this procedure recursively and for every possible hash, which we find in the
+already downloaded files, we can slowly restore the repository and extract the contents.
+
+Sometimes downloading a specific object will fail, leaving us with an incomplete repository. In that case,
+we can use git fsck command to search for these missing/broken object files.
+
+
+
+
+
+
+
+
+
+   add two fiel:
+                    echo hello > file1.txt
+                    echo hello > file2.txt
+   add stageing area (modified in work directory)
+                    git add *.txt
+                    git commit -m "initial statement"
+   add more changes
+                    echo hello world! >> file1.txt
+   update repo with new changes
+                    git commit -m "fixed file1"
+
+   browsing history
+
+   branching & merging
+
+   collaboaration
+
+   rewriting history
+
+
+
+[repo command]
+
+
+[staged command]
+                  git commit -m "<text" "add stage to repo area
+                  git ls-files          "short-cut gls
+                  git restore <file>... " this is not right:will copy stage area to workdir
+                  git restore --source=HEAD~1 greeting.txt
+                  git restore --staged <files>
+
+
+
+[workdir command]
+                  git add file2.txt   "add workdir change to stage area
+                  git status
+                  git status -s       "show remote or origin and local
+                  git add/rm <file>..." will update work and stage area
+                  "-"$ git rm --cached bin/app.bin  #cashed
+                  "-"$ git rm --cached -r bin  #cashed with direcroy
+
+[.git directory]
+                  .gitignore          "files are not tracked in repo.eg .bin
+
+[.git utility  ]
+                  git config --global diff.tool vscode
+                  git config --global difftool.vscode.cmd "code
+                  --wait --diff $LOCAL $REMOTE"
+                  git config --e   # is editor
+                  git difftool
+                  git difftool --staged
+
+                  git diff --staged  #old copy # new copy
+                  git rev-parse HEAD    "same as cat .git/refs/heads/<branch
+                  git config --list     "look at config --list section
+                  $ git config --list --local
+                  $ git config --list --system
+
+example           diff --git a/file1.js b/file1.js
+                  new file mode 100644
+                  index 0000000..a1b0d49
+                  --- /dev/null        #old copy
+                  +++ b/file1.js       #new copy
+                  @@ -0,0 +1,2 @@      #old copy start length,
+                  new copy 1 and length is 2jt
+                  +sky
+                  +ocean
+                  diff --git a/file2.js b/file2.js
+                  new file mode 100644
+                  index 0000000..14c9b44
+                  --- /dev/null
+                  +++ b/file2.js
+                  @@ -0,0 +1 @@
+                  +sky2
+
+
+                  git log --oneline           "for short
+                  git log --oneline --reverse
+                  git show                    "repo
+                  git show  HEAD
+                  git show  HEAD~1
+                  git show  HEAD~1:.gitignore
+                  git ls-tree HEAD~1
+
+example           "-"$ git ls-tree HEAD~1
+                  100644 blob 51912609ec27972cefdb1287cf1c5c9fe284b0f5    .gitignore
+                  040000 tree 64629cd51ef4a65a9d9cb9e656e1f46e07e1357f    bin
+                  100644 blob 373236eef44d8d901f5c9c498c4f3fe8ba285e28    main.js
+                  "-"$ git show  51912
+                  logs/
+                  bin/
+                  "-"$ git show  64629cd
+                  tree 64629cd
+
+                  app.bin
+                  "-"$
+
+example           restore
+                  #undo is git reset but it is comfusing so changed to git restoret
+                  git restore --staged file1.js
+
+                   echo myfile.txt >> shortcut.txt
+                   git status -s
+                   M shortcut.txt          "after add modified
+                   git add shortcut.txt    "add to staged
+                   git status -s
+                  M  shortcut.txt          "left column is mod"
+                   git restore --staged shortcut.txt
+                   git status -s
+                   M shortcut.txt          "remove from staged but not delete
+                                           "work directory
+                   git restore shortcut.txt " removed work direcory
+
+
+                   git clean
+                   fatal: clean.requireForce defaults to true and neither -i,
+                   -n, nor -f given;
+                   refusing to clean
+                   git clean -fd
+                   Removing file1.js
+                   Removing file2.js
+
+                   Run 'git clean -n' to see a dry run;
+                   Run 'git clean -f' to force untracked file deletion;
+                   Use 'git clean -f -d' to remove untracked directories;
+                   Use 'git clean -f -x' to remove untracked . gitignore files; and.
+                   Add the -i switch to do an interactive 'git clean'.
+
+
+====================================== git works
+                  ################################
+                  digital ocean
+                  droplet-> ubunto-> smallest $5 per month -> enable backup ->
+                  region -> one time
+                  password /root by email/  -> host name git -> myproject
+
+                  connect directy : credential root/password
+                  ssh built in
+                  ssh root@2.0.....
+                  root/git
+
+                  for ubuntu how to get git
+                  apt-get update
+                  apt-get install git  "2.17
+
+                  for how to open zch
+                  iterm2 andi zch custom terminal/shell
+                  oh my zsh
+                  chsh -s /bin/zsh
+                  open . open finder~~~
+                  x           Initialization
+                  git init
+
+
+====================================== what is git
+Git Objects: Blob, Tree, Commit, Annotaged Tag
+
+[ hash]
+                  how to make hash object such as blob
+                  git hash-object
+                  git hash-object <filename> -w
+
+                  echo "Hello, Git" | git hash-object --stdin -w
+
+                  After the commain repo has hash file
+                  .git/object/b7/aec...file
+                  b7aec520dec0a7516c18eb4c68b64ae1eb9b5a5e
+                  git cat-file -p b7aec52     "p for "cat
+                  Hello, Git
+                  git cat-file -s b7aec52     "s for size
+                  11
+                  git cat-file -t b7aec52     "t for type (blob, tree,..)
+                  blob
+                  "file cannot be found.......
+                  $ git ls-tree HEAD
+                  100644 blob fc192b156d33a32e6eed604e916e3044291a896a    file1.txt
+                  100644 blob 446a0990d2ccbd2640b3505eb1a0fb5dc723a472    file2.txt
+
+                  git config --list
+                  diff.astextplain.textconv=astextplain
+                  filter.lfs.clean=git-lfs clean -- %f
+                  filter.lfs.smudge=git-lfs smudge -- %f
+                  filter.lfs.process=git-lfs filter-process
+                  filter.lfs.required=true
+                  http.sslbackend=openssl
+                  http.sslcainfo=C:/Program Files/Git/mingw64/ssl/certs/ca-bundle.crt
+                  core.autocrlf=true
+                  core.fscache=true
+                  core.symlinks=false
+                  pull.rebase=false
+                  credential.helper=manager-core
+                  credential.https://dev.azure.com.usehttppath=true
+                  init.defaultbranch=master
+                  user.name=Chris Chu
+                  user.email=jchu02@yahoo.com
+                  core.autocrlf=input
+                  core.editor=vim
+                  core.repositoryformatversion=0
+                  core.filemode=false
+                  core.bare=false
+                  core.logallrefupdates=true
+                  core.symlinks=false
+                  core.ignorecase=true
+
+                  $ git config --list --global
+                  user.name=Chris Chu
+                  user.email=jchu02@yahoo.com
+                  core.autocrlf=input
+                  core.editor=vim
+
+                  $ git config --list --local
+                  core.repositoryformatversion=0
+                  core.filemode=false
+                  core.bare=false
+                  core.logallrefupdates=true
+                  core.symlinks=false
+                  core.ignorecase=true
+
+                  $ git config --list --system
+                  diff.astextplain.textconv=astextplain
+                  filter.lfs.clean=git-lfs clean -- %f
+                  filter.lfs.smudge=git-lfs smudge -- %f
+                  filter.lfs.process=git-lfs filter-process
+                  filter.lfs.required=true
+                  http.sslbackend=openssl
+                  http.sslcainfo=C:/Program Files/Git/mingw64/ssl/certs/ca-bundle.crt
+                  core.autocrlf=true
+                  core.fscache=true
+                  core.symlinks=false
+                  pull.rebase=false
+                  credential.helper=manager-core
+                  credential.https://dev.azure.com.usehttppath=true
+                  init.defaultbranch=master
+
+
+untracked,           Modified,                 Staged,             Unmodified
+[[ stage(start track                           }]]
+                        [[commit             ]
+[[change in file                             ]]]]
+[[ git add              ]]
+[[ untrack                                                           ]
+
+
+
+
+
+[ make tree]      *use nano to add the tab
+[ make tree]      *use nano to add the tab
+                  git mktree
+
+                  cat ../tree2.txt
+                 100644 blob e325815411134ddc9efb1305e4ed4dccafda0cfb  file1.txt
+                 100644 blob 9dbb0c1beb063a091c93537fac3b813685b2eb14  file2.txt
+                  cat ../tree2.txt | git mktree
+                 fatal: input format error: 100644 blob e325815411134ddc9efb1305e4ed4dccafda0cfb  file1.txt
+                  cat -e ../tree2.txt | git mktree
+                 fatal: input format error: 100644 blob e325815411134ddc9efb1305e4ed4dccafda0cfb  file1.txt$
+                  cat -v ../tree2.txt | git mktree
+                 fatal: input format error: 100644 blob e325815411134ddc9efb1305e4ed4dccafda0cfb  file1.txt
+>>>>>>           nano ../tree2.txt
+                  cat -v ../tree2.txt | git mktree
+
+
+
+
+
+
+
+
+
+
+
+
+
+[ read git object]
+i                 git cat-file
+
+
+[side issue on hash]
+
+                  JSON (JavaScript Object Notation)
+                  { "id: "12345678",
+                    "name" : "Mike",
+                    "hobbies": ["a", "b"]
+                  }
+                  hash function => MD5 128bit, SHA1 160biti-> ,
+                  SHA256 256bit, SHA512
+                  hash md5 only hello World
+hash util         man shasum
+                  echo o -n "Hello1, Git" | shasum
+                  Folder name + File name = File SHA1 has
+                  probability of hash collision
+                  git show fc1t              "shows actual file means
+                                             "data base has this hash
+
+                  Git blobs don;t have name!
+                  the size and type of each object are store in Git!
+                  shasum
+                  git : content + object type "blocb" + object length = hash
+
+
+                  echo "Second file in Git repository" | git hash-object --stdin
+                  4400aae52a27341314f423095846b1f215a7cf08
+                  echo "Second file in Git repository" | git hash-object --stdin -w
+                  4400aae52a27341314f423095846b1f215a7cf08
+                  echo  -e "blob 30\0Second file in Git repository" |shasum
+                  4400aae52a27341314f423095846b1f215a7cf08 *-
+
+
+[ tree ]
+                  tree:
+                  it is representation of directory   :
+                  but it is same structure: what is content
+                  git ls-tree HEAD
+                  100644 blob fc192b156d33a32e6eed604e916e3044291a896a    file1.txt
+                                     ##permission first
+                                     04 directory 100755 executable
+                 100644 blob 446a0990d2ccbd2640b3505eb1a0fb5dc723a472    file2.txt
+                  find .git/objects -type f
+                 .git/objects/0c/00c1d571b7a6dbbe2166c586c35a86056c752c
+                 .git/objects/44/00aae52a27341314f423095846b1f215a7cf08
+                 .git/objects/44/6a0990d2ccbd2640b3505eb1a0fb5dc723a472
+                 .git/objects/68/8d66a769eec2de2c56277b09ae6196638da49d
+                 .git/objects/73/46b4bd8a8f99841df2a65de39b8d04c1ac255e
+                 .git/objects/fc/192b156d33a32e6eed604e916e3044291a896a
+                 cat filename.txt | git mktree
+                 git read-tree
+
+
+Blobs are stored in trees
+The contents of your files are stored in blobs, but those blobs are pretty featureless. They have no name, no structure — they’re just “blobs”, after all.
+
+In order for Git to represent the structure and naming of your files, it attaches blobs as leaf nodes within a tree. Now, I can’t discover which tree(s) a blob lives in just by looking at it, since it may have many, many owners. But I know it must live somewhere within the tree held by the commit I just made:
+
+$ git ls-tree HEAD
+100644 blob af5626b4a114abcb82d63db7c8082c3c4756e51b greeting
+There it is! This first commit added my greeting file to the repository. This commit contains one Git tree, which has a single leaf: the greeting content’s blob.
+
+Although I can look at the tree containing my blob by passing HEAD to ls-tree, I haven’t yet seen the underlying tree object referenced by that commit. Here are a few other commands to highlight that difference and thus discover my tree:
+
+$ git rev-parse HEAD
+588483b99a46342501d99e3f10630cfc1219ea32 # different on your system
+
+$ git cat-file -t HEAD
+commit
+
+$ git cat-file commit HEAD
+tree 0563f77d884e4f79ce95117e2d686d7d6e282887
+author John Wiegley <johnw@newartisans.com> 1209512110 -0400
+committer John Wiegley <johnw@newartisans.com> 1209512110 -0400
+Added my greeting
+
+Let’s verify that this is indeed the same tree object:
+
+$ git ls-tree 0563f77
+100644 blob af5626b4a114abcb82d63db7c8082c3c4756e51b greeting
+
+$ find .git/objects -type f | sort
+.git/objects/05/63f77d884e4f79ce95117e2d686d7d6e282887
+.git/objects/58/8483b99a46342501d99e3f10630cfc1219ea32
+.git/objects/af/5626b4a114abcb82d63db7c8082c3c4756e51b
+
+=========================== part 2
+
+
+
+#remove from staging area!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+$ git status
+On branch master
+Untracked files:
+          file3.txt
+$ git add file3.txt
+$ git ls-files
+file3.txt
+greeting.txt
+$ fig ls-files -s
+bash: fig: command not found
+$ git ls-files -s
+100644 8bb5b7c4f6277509216778c581f9f821a8aaa28c 0       file3.txt
+100644 af5626b4a114abcb82d63db7c8082c3c4756e51b 0       greeting.txt
+$ git status
+On branch master
+Changes to be committed:
+$ git commit -m "second commit"
+[master 2deac69] second commit
+ 1 file changed, 1 insertion(+)
+  create mode 100644 file3.txt
+  $ git status
+  On branch master
+  nothing to commit, working tree clean
+
+git restore --staged file1.js
+
+git restore --source=HEAD~1 greeting.txt
+
+
+ git cat-file -p 2deac69
+ tree f53d9758e0cd6d0dec78281af83e3466fe8d0d7f
+ parent 0e37417ed0edf4cf26c09a1ba769a165a240fa74
+ author Chris Chu <jchu02@yahoo.com> 1643593633 -0500
+ committer Chris Chu <jchu02@yahoo.com> 1643593633 -0500
+
+ second commit
+
+
+What is parent commit:
+$ git log
+commit 2deac69a73cdcc228a5b00e9afd43c1c9e6f227c (HEAD -> master)
+latest commit is parent commit
+why after commit has tree because of new file3.txt
+* tree was reused due to not needed before * but new file3.txt is created so is is screated
+
+
+latest one has pointer to parent commit
+
+
+===============================================================
+branch and head
+
+download : github desktop
+
+Branch is just text reference to the commit
+1. Default branch is master
+2. multiple branches can exist in the same repository
+3. pointer for all branches are located in .git/refs/heads
+4. current branch tracks new commits
+5. branch pointer moves automatically after every new commit
+6.change branch  git checkout <branch>
+
+
+HEAD is reference to the currently checked out branch or commit
+
+1. HEAD is locally significant
+2. Pointer is located in the .git/HEAD file
+3. Default pointer is ref: refs/heads/master
+4. Change reference to specific branch git checkout <branch>
+5. Change reference to specific commit git checkout <sha1>
+
+git log
+git cat-file -p [hash]
+
+git ls-files -s empty
+
+$ git checkout 97d3dca
+Note: switching to '97d3dca'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+    git switch -c <new-branch-name>
+
+    Or undo this operation with:
+
+      git switch -
+
+      Turn off this advice by setting config variable advice.detachedHead to false
+
+      HEAD is now at 97d3dca Third commit
+
+
+
+$ git checkout 2dea
+Previous HEAD position was 97d3dca Third commit
+HEAD is now at 2deac69 second commit
+
+$ git ls-files -s
+100644 8bb5b7c4f6277509216778c581f9f821a8aaa28c 0       file3.txt
+100644 af5626b4a114abcb82d63db7c8082c3c4756e51b 0       greeting.txt
+
+$ ls
+file3.txt  greeting.txt
+
+
+
+
+what is nature of branch ?
+BR-102 is good
+
+
+git branch
+git branch name
+git checkout name
+git branch -d name
+git branch -D name   **
+git branch -m old new
+git checkout -b branch_name   #create and checkout
+
+========================================  part 3
+
+We want to add file from github.com
+git pull -v
+git branch -vv
+* main 461fdd1 [origin/main: ahead 1] my first git tutorial
+(use "git push" to publish your local commits)
+
+Following is how to add file into web.
+git commit -am "successfully push to web tutorial.txt"
+git branch -vv
+git push
+
+
+
+
+========================================  part 4
+git config core.sparsecheckout true
+
+# Configure sparse-checkout
+echo some/dir/ >> .git/info/sparse-checkout
+echo another/sub/tree >> .git/info/sparse-checkout
+
+# Update your working tree:
+#bad  git read-tree -mu HEAD
+git read-tree <hash of tree>
+git ls-files should verify the tree is there.
+100644 e325815411134ddc9efb1305e4ed4dccafda0cfb 0       file1.txt
+100644 9dbb0c1beb063a091c93537fac3b813685b2eb14 i<<0>>       file2.txt
+git checkout-index -a
+This will bring back staging area(index) to working directory
+
+
+
+
+
+
+Adding a blob object to git’s internal database doesn’t change the status, as git doesn’t know of any tracked or untracked files at this stage. We need to track this file — add it to the staging area. To do that, we can use the plumbing command git update-index, like so: git update-index --add --cacheinfo 100644 <blob-hash> <filename>.
