@@ -68,16 +68,17 @@ git config --global user.email jchu02.githubber@yahoo.com
 
 ==========================================================================
                  git commit -m "msg"
+                 git restore --staged <files> "if file is deleted from staged area
+                                              "it is opposite of commit
 ---staging repo-----------------------------------------------------------
                  git ls-files
-                 git restore --staged <files> "if file is deleted from staged area
-                 
                  git checkout-index -a        "down load to work directory
 ==========================================================================
 
 
-========================================================================== 
+==========================================================================
                  git add filename
+                 git restore filename          "opposite of add
                  git status
                  git status -s
 ---work directory---------------------------------------------------------
@@ -205,6 +206,8 @@ Command summary
 
 ==========================================================================
                  git commit -m "msg"
+                 git restore --staged <files> "if file is deleted from staged area
+                                              "it is opposite of commit
 ---staging repo-----------------------------------------------------------
                  git checkout -- filename      "Undo an uncommitted change to one file
                  git reset --hard              "Undo all uncommitted changes
@@ -215,6 +218,9 @@ Command summary
 
 ==========================================================================
                  git add filename
+                 git restore filename          "opposite of add
+                 git status
+                 git status -s
 ---work directory---------------------------------------------------------
 ==========================================================================
 
