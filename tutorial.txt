@@ -4,14 +4,14 @@ one location is https://github.com/nlee1025/Awk.git
 #add short cut for followin : .bashrc
 #===================================================
 #[repo cmd] print commit history
-            alias glog="git log "
-
-#[modify cmd] print commit history
-            alias gls="git ls-files "
-
-#[file cmd] print commit history
-            alias gstat="git status "
+alias glog="git log "                                                                                                   
+#[modify cmd] print staging area files
+alias gls="git ls-files "
+#[file cmd] print git repo status
+alias gstat="git status "
+#[file cmd] print git object
 alias gf="git cat-file -p "
+
 alias b="cd ..; ls"
 alias bb="cd ../..; ls"
 alias bbb="cd ../../..; ls"
