@@ -1029,4 +1029,6 @@ http://github.com/jchu02/first-git-practice/compare/new-feature2?expand=1
 
 
 
-
+"{{{ pull request
+we need two accounts. github desktop -> preference ..  then we can open pull
+request
