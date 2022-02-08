@@ -1011,3 +1011,22 @@ This will bring back staging area(index) to working directory
 
 
 Adding a blob object to git’s internal database doesn’t change the status, as git doesn’t know of any tracked or untracked files at this stage. We need to track this file — add it to the staging area. To do that, we can use the plumbing command git update-index, like so: git update-index --add --cacheinfo 100644 <blob-hash> <filename>.
+
+"}}}
+
+"{{{ Gib tutrial : 
+
+from github desktop
+          * got got to main branch 
+          * create a new branch
+          * /featue2/another-feature.txt
+          * publish  -- pushing to origin 
+          * pull request is not active      * check preference and there is no
+          signin  is not there
+http://github.com/jchu02/first-git-practice/compare/new-feature2?expand=1
+
+"}}}
+
+
+
+
