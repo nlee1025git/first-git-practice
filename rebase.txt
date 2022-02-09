@@ -1,2 +1,3 @@
 rebase text file added
 rebase two happen and modified
+it is time to merge little differently
