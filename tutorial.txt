@@ -1051,3 +1051,10 @@ request
                  git tag -a v1.0.1 -m "Pathch for v1.0.0   "create new tag v1.0.1
                  git push -v origin v1.0.1             "push only single tag "only tag"
                  git push -v                           "new commit created
+[rebasing]
+                 only use in local machine because it is destructive
+                 rewrite history  for branch out and remerge then commit has two or more parents
+                 history become linear  : benefit
+                 some commits are lost
+                 
+                 
