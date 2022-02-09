@@ -89,6 +89,9 @@ git config --global user.email jchu02.githubber@yahoo.com
                  git difftool
                  git log
                  git log --oneline --all --graph   "give graphic
+                 git tag -a v1.0.0 -m "Initial tag"
+                 git tag -v v1.0.0                     "this shows weatehr it is object
+                 git push -v origin v1.0.1             "push only single tag "only tag"
 ==========================================================================
 
 
@@ -239,10 +242,9 @@ Command summary
                  git tag -a v1.0.0 -m "Initial tag"
                  git tag -v v1.0.0                     "this shows weatehr it is object
                  ls .git/refs/tags                     "tag object is created
-                 git push -v --tag                     "tag is created to remote server
-                 git tag -a v1.0.1 -m "Pathch for v1.0.0   "create new tag v1.0.1
+                 git push -v --tag                     "all tags are push to remote server
                  git push -v origin v1.0.1             "push only single tag "only tag"
-                 git push -v                           "new commit created
+                 git push -v                           "**only commits are push to remote server
 ==========================================================================
 
 
@@ -1040,3 +1042,12 @@ http://github.com/jchu02/first-git-practice/compare/new-feature2?expand=1
 "{{{ pull request
 we need two accounts. github desktop -> preference ..  then we can open pull
 request
+
+[tag]
+                 git tag -a v1.0.0 -m "Initial tag"
+                 git tag -v v1.0.0                     "this shows weatehr it is object
+                 ls .git/refs/tags                     "tag object is created
+                 git push -v --tag                     "tag is created to remote server
+                 git tag -a v1.0.1 -m "Pathch for v1.0.0   "create new tag v1.0.1
+                 git push -v origin v1.0.1             "push only single tag "only tag"
+                 git push -v                           "new commit created
