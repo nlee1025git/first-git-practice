@@ -235,6 +235,14 @@ Command summary
                  git difftool
                  git log
                  git log --oneline --all --graph
+                 
+                 git tag -a v1.0.0 -m "Initial tag"
+                 git tag -v v1.0.0                     "this shows weatehr it is object
+                 ls .git/refs/tags                     "tag object is created
+                 git push -v --tag                     "tag is created to remote server
+                 git tag -a v1.0.1 -m "Pathch for v1.0.0   "create new tag v1.0.1
+                 git push -v origin v1.0.1             "push only single tag "only tag"
+                 git push -v                           "new commit created
 ==========================================================================
 
 
