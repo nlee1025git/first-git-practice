@@ -1055,6 +1055,14 @@ request
                  only use in local machine because it is destructive
                  rewrite history  for branch out and remerge then commit has two or more parents
                  history become linear  : benefit
-                 some commits are lost
+                 * Checkout feature1 and then rebase with master this will change feature1 and some commits are deleted
+                 * Checkout main and merge with feature1
+
+                 Merging of the feature branch into base branch using rebasing is two-step process
+                 1. Checkout feature branch                        .. git checkout feature1
+                 2. Rebase feature branch or top of the base branch ..git rebase master
+                 3. checkout base branch                            ..git checkout master
+                 4. Merge feature branch into the base branch       ..git merge feature 1
+                 5. Fast forward merge will used
                  
                  
