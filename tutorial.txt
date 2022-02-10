@@ -3,8 +3,9 @@ one location is https://github.com/nlee1025/Awk.git
 
 #add short cut for followin : .bashrc
 #===================================================
-#[repo cmd] print commit history
-alias glog="git log "                                                                                                   
+#[repo cmd] print commit history or graph
+alias glog="git log "            
+alias glogg="git log --oneline --all --graph"
 #[modify cmd] print staging area files
 alias gls="git ls-files "
 #[file cmd] print git repo status
