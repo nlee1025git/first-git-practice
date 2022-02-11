@@ -1117,8 +1117,28 @@ request
                  www.gitignore.io // or https://www.toptal.com/developers/gitignore
                  
                  
+[Detached HEAD state]
+                 *git checkout <SHA>
+                 normally Head and master are the same
+                 if checkout for <SHA> then master stay the same but HEAD move to <SHA> commit
+                 basically creating new branch from <SHA> commit
+                 If user decide to move back to master then headless branch will be removed.
+                 If user choose to have new commit then create new branch and <SHA> commit
                  
                  
+                 cat .git/Head                    "refs/heads/master
+                 git checkout <SHA>
+                 "now detached HEAD state"
+                 git checkout -b <new-branch-name>
+                 gti branch <new-branch> <SHA>
+                 git checkout -b experimental
+                 cat .git/HEAD                    "refs/heads/experimental
+                 
+                 git checkout master
+                 git add more file
+                 git performs 3-way merge
+                 git merge -v experimental
+                 git branch -d experimental
                  
                  
                  
