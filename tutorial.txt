@@ -37,10 +37,15 @@ git tag -s <tag-name>
 
 
 
-making new git project
+* making new git project
 mkdir a-new-project
 cd a-new-project
 git init
+echo "# a-new-project git project" >> README.md
+git add README.md
+git commit -m "first commit in a-new-project"
+git remoe add origin <web-url>                  "copy the local repository to github
+git push -u origin main                         "or master
 ls -a
 git config --global user.name "Chris Chu"
 git config --global user.email jchu02.githubber@yahoo.com
@@ -56,6 +61,11 @@ git config --global user.email jchu02.githubber@yahoo.com
 ==========================================================================
 
 ==========================================================================
+                 "first make directory and cd into directory
+                 git init                           
+                 git remoe add origin <web-url>     "from local to push to gitbhub
+                 git push -u origin main            "for old, master..need user/pass
+                 
                  git push
                  --------------------------------------------------------
                  git clone <weblink>
@@ -1091,8 +1101,13 @@ request
                  
                  1. Step: create git repository from github
                  2. push an existring repository from the command line        .. git remote add origin <web-url>
-                                                                              .. git push -u origin master
-                 3.
+                                                                              .. git branch -M main
+                                                                              .. git push -u origin main
+                 
+                 * How to make previously ignore file tracked
+                 
+                 
+                 
                  
                  
                  
