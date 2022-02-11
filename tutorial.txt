@@ -1107,6 +1107,15 @@ request
                  * How to make previously ignore file tracked
                  change .gitignore and add back new-file.txt                  "this only update .gitignore file only
                  git rm --cached new-file.txt                                 "remove from repo but keep it in working directory
+                 git commit 
+                 git push 
+                 the new file is removed from remote repository but the file is still exist in working directory
+                 
+                 Best practice for git ignore
+                 bin/                                                       "builds are created
+                 *.log, *.pyc, Thumb.db, .DS_Store                          "by-product files
+                 www.gitignore.io // or https://www.toptal.com/developers/gitignore
+                 
                  
                  
                  
