@@ -12,6 +12,7 @@ alias gloggg="git log --topo-order --all --graph --date=local --pretty=format:'%
 alias gls="git ls-files "
 #[file cmd] print git repo status
 alias gstat="git status "
+alias gstatt="git status -s"
 #[file cmd] print git object
 alias gf="git cat-file -p "
 
@@ -36,7 +37,9 @@ git config --global user.signingkey <gpg-key-id>
 git tag -s <tag-name>
 
 
-
+#following will create a directory and git initialize
+# add README.md file and store into git
+# update <web-url> with current new git project
 * making new git project
 mkdir a-new-project
 cd a-new-project
@@ -46,7 +49,7 @@ git add README.md
 git commit -m "first commit in a-new-project"
 git remoe add origin <web-url>                  "copy the local repository to github
 git push -u origin main                         "or master
-ls -a
+#
 git config --global user.name "Chris Chu"
 git config --global user.email jchu02.githubber@yahoo.com
 
@@ -58,6 +61,7 @@ git config --global user.email jchu02.githubber@yahoo.com
 
 ==========================================================================
 ---web--------------------------------------------------------------------
+                
 ==========================================================================
 
 ==========================================================================
