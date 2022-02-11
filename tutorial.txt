@@ -1084,7 +1084,15 @@ request
                  4. create new file "new-file.txt" 
                  5. git status does not show "new-file.txt" is untracked file ... git status
                  
+                 Inside of .gitignore
+                 new-file.txt             #ignore single file
+                 bin/                     #ignore all files in the bin directory
+                 *.tmp                    #ignore all .tmp files
                  
+                 1. Step: create git repository from github
+                 2. push an existring repository from the command line        .. git remote add origin <web-url>
+                                                                              .. git push -u origin master
+                 3.
                  
                  
                  
