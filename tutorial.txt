@@ -1067,5 +1067,24 @@ request
                  3. checkout base branch                            ..git checkout master
                  4. Merge feature branch into the base branch       ..git merge feature 1
                  5. Fast forward merge will used
+                 6. Delete branch                                   ..git branch -d feature 1 
+                 What is difference between Merge and Rebase
+                 * Merge has all the commit in accending time order and does not change commit
+                 * Rebasing changes commit line. Commit has two time line one for initial commit and commit
+                 * Graph is linear
+                 
+[ignore]
+                 * additional status
+                 * explicitly tell Git which files and folders to ignore     ...gitignore file
+                 * Git files status * Untracked, Tracked (unmodified, Modified, staged), ignored
+                 
+                 1. make file name as .gitignore in Git project directory
+                 2. .gitignore need to be commited                            ... git add .gitignore; git commit -m ".gitignore file is added"
+                 3. type new-file.txt in .gitignore file                      ... add and commit
+                 4. create new file "new-file.txt" 
+                 5. git status does not show "new-file.txt" is untracked file ... git status
+                 
+                 
+                 
                  
                  
