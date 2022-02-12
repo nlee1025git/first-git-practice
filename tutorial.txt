@@ -228,6 +228,7 @@ Command summary
                  git commit -m "msg"
                  git restore --staged <files> "if file is deleted from staged area
                                               "it is opposite of commit
+                 git reset HEAD <file>        " it is the same as above (before v2.32.0)
 ---staging repo-----------------------------------------------------------
                  git checkout -- filename      "Undo an uncommitted change to one file
                  git reset --hard              "Undo all uncommitted changes
