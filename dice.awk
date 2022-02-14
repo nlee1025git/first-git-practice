@@ -1,23 +1,21 @@
 BEGIN {
   n = 3;
-  outcome = 10;
+  outcome = 1..3*6;
 
-  for (i = 0; i < n; i++) {
+  for (i = 0; i < n; i++) {       // dice number
     for (j = 0; j < (i + 1) * 6; j++) {
-      if ((i + 1) == 1) {
+      if (i == 0) {
         A[i SUBSEP j] = 1
       } else {
-        A[i SUBSEP j] = (i + 1)
+        //need to run for 1 to 6
+        A[i SUBSEP j] = look at one less dice outcome probability
       }
       print A[i SUBSEP j]
     }
     print " "
   }
 
-  print "1) " A[0 SUBSEP 2]
-  print "2) " A[2 SUBSEP 17]
-  print "3) " A[0 SUBSEP]
-
+ 
   for (i in A) {
     print i, A[i]
   }
