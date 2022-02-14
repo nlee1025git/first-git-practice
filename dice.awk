@@ -1,0 +1,25 @@
+BEGIN {
+  n = 3;
+  outcome = 10;
+
+  for (i = 0; i < n; i++) {
+    for (j = 0; j < (i + 1) * 6; j++) {
+      if ((i + 1) == 1) {
+        A[i SUBSEP j] = 1
+      } else {
+        A[i SUBSEP j] = (i + 1)
+      }
+      print A[i SUBSEP j]
+    }
+    print " "
+  }
+
+  print "1) " A[0 SUBSEP 2]
+  print "2) " A[2 SUBSEP 17]
+  print "3) " A[0 SUBSEP]
+
+  for (i in A) {
+    print i, A[i]
+  }
+}
+{}
