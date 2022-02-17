@@ -1,7 +1,8 @@
 BEGIN {
   n = 3;
   outcome = 10;
-  range = 1..3*6;
+  range_start = 1
+  range_end = n * 6;
 
   for (i = 0; i < n; i++) {
     for (j = 0; j < (i + 1) * 6; j++) {
