@@ -10,27 +10,27 @@ Second Semester
 CS 211 Object-Oriented Programming 3    [yes]
 MATH 114 Analytic Geom. and Calculus II [engineering  yes]
 MATH 125 Discrete Math 3                [XXX          pass]
-PHYS 160 University Physics I 3
-PHYS 161 University Physics I Lab 1
-ECE 101 Intro. to Electrical and Computer Engg 3
+PHYS 160 University Physics I 3         [yes]
+PHYS 161 University Physics I Lab 1     [yes]
+ECE 101 Intro. to Electrical and Computer Engg 3   [yes]
 Total Hours 17
 
 
 
 
 Third Semester
-ECE 201 Intro. to Signal Analysis 3
-MATH 203 Linear Algebra 3
-MATH 213 Analytic Geom. and Calculus III 3
-PHYS 260 University Physics II 3
-PHYS 261 University Physics II Lab 1
-Literature Elective. 3
+ECE 201 Intro. to Signal Analysis 3         [resistor / capacitor: linear ]
+MATH 203 Linear Algebra 3                   [XXXX]-- helps understand linear
+MATH 213 Analytic Geom. and Calculus III 3  [yes]
+PHYS 260 University Physics II 3            [yes]
+PHYS 261 University Physics II Lab 1        [yes]
+Literature Elective. 3                      xxxx
 Total Hours 16
 
 Fourth Semester
-ECE 220 Signals and Systems I 3
-*ECE 285 Electric Circuit Analysis I 3
-ECE 331 Digital System Design 3
+ECE 220 Signals and Systems I 3             
+*ECE 285 Electric Circuit Analysis I 3      [ transistor]
+ECE 331 Digital System Design 3             [ verilog = logic]
 ECE 332 Digital Electr. and Logic Design Lab 1
 MATH 214 Elem. Differential Equations 3
 CS 222 Computer Programming for Engineers 3
