@@ -1,0 +1,78 @@
+First Semester
+CS 112 Intro to Computer Programming 4
+ECON 103 Contemp. Microeconomic Prin. 3
+ENGH 101 Composition 3
+ENGR 107 Intro to Engineering 2
+MATH 113 Calculus I 4
+Total Hours 16
+
+Second Semester
+CS 211 Object-Oriented Programming 3
+MATH 114 Analytic Geom. and Calculus II
+MATH 125 Discrete Math 3
+PHYS 160 University Physics I 3
+PHYS 161 University Physics I Lab 1
+ECE 101 Intro. to Electrical and Computer Engg 3
+Total Hours 17
+
+
+
+
+Third Semester
+ECE 201 Intro. to Signal Analysis 3
+MATH 203 Linear Algebra 3
+MATH 213 Analytic Geom. and Calculus III 3
+PHYS 260 University Physics II 3
+PHYS 261 University Physics II Lab 1
+Literature Elective. 3
+Total Hours 16
+
+Fourth Semester
+ECE 220 Signals and Systems I 3
+*ECE 285 Electric Circuit Analysis I 3
+ECE 331 Digital System Design 3
+ECE 332 Digital Electr. and Logic Design Lab 1
+MATH 214 Elem. Differential Equations 3
+CS 222 Computer Programming for Engineers 3
+Total Hours 16
+
+
+
+Fifth Semester
+ECE 333 Linear Electronics I 3
+ECE 334 Linear Electronics Lab I 1
+ECE 445 Computer Organization 3
+ENGH 302 Advanced Composition
+ (Natural Science/ Tech section) 3
+ECE 286 Electric Circuit Analysis II 3
+CS 310 Data Structures 3 3
+Total Hours 16
+
+Sixth Semester
+COMM 100 Public Speaking 3
+CS 471 Operating Systems 3
+PHYS 262 University Physics III 3
+ECE 448 FPGA and ASIC Design w/VHDL 4
+STAT 346 Probability for Engineers 3
+Total Hours 16
+
+
+Seventh Semester
+Technical Elective 3
+Global Understanding Elective 3
+ECE 447 Single-Chip Microcomputers 4
+ECE 491 Engineering Seminar 1
+ECE 492 Senior Advanced Design Project I 1
+HIST 100 Hist. of Western Civilization
+ Or HIST 125 Intro. to World History 3
+
+Total Hours 15
+
+
+Eighth Semester
+Technical Elective 3
+Technical Elective 3
+Arts Elective 3
+ECE 493 Senior Advanced Design Project II 2
+ECE 465 Computer Networking Protocols 3
+Total Hours 14
