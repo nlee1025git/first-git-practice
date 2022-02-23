@@ -2,7 +2,7 @@ First Semester
 CS 112 Intro to Computer Programming 4   XXX
 ECON 103 Contemp. Microeconomic Prin. 3  XXX
 ENGH 101 Composition 3                   XXX
-ENGR 107 Intro to Engineering 2          [yes]
+ENGR 107 Intro to Engineering 2          [XXX]
 MATH 113 Calculus I 4                    [this coming semester]
 Total Hours 16
 
@@ -10,8 +10,8 @@ Second Semester
 CS 211 Object-Oriented Programming 3    [yes]
 MATH 114 Analytic Geom. and Calculus II [engineering  yes]
 MATH 125 Discrete Math 3                [XXX          pass]
-PHYS 160 University Physics I 3         [yes]
-PHYS 161 University Physics I Lab 1     [yes]
+PHYS 160 University Physics I 3         [yes, summer ]
+PHYS 161 University Physics I Lab 1     [yes, summer]
 ECE 101 Intro. to Electrical and Computer Engg 3   [yes]
 Total Hours 17
 
@@ -39,28 +39,28 @@ Total Hours 16
 
 
 Fifth Semester
-ECE 333 Linear Electronics I 3
-ECE 334 Linear Electronics Lab I 1
-ECE 445 Computer Organization 3
+ECE 333 Linear Electronics I 3            [transistor]
+ECE 334 Linear Electronics Lab I 1        [transistor]
+ECE 445 Computer Organization 3           logic
 ENGH 302 Advanced Composition
  (Natural Science/ Tech section) 3
-ECE 286 Electric Circuit Analysis II 3
-CS 310 Data Structures 3 3
+ECE 286 Electric Circuit Analysis II 3     circuit
+CS 310 Data Structures 3 3                 c programming (java)
 Total Hours 16
 
 Sixth Semester
-COMM 100 Public Speaking 3
-CS 471 Operating Systems 3
-PHYS 262 University Physics III 3
-ECE 448 FPGA and ASIC Design w/VHDL 4
-STAT 346 Probability for Engineers 3
+COMM 100 Public Speaking 3                  xxx
+CS 471 Operating Systems 3                  c programming (os)
+PHYS 262 University Physics III 3           Moden Physics*** relativity
+ECE 448 FPGA and ASIC Design w/VHDL 4       [verilog = logic]
+STAT 346 Probability for Engineers 3        math?
 Total Hours 16
 
 
 Seventh Semester
 Technical Elective 3
 Global Understanding Elective 3
-ECE 447 Single-Chip Microcomputers 4
+ECE 447 Single-Chip Microcomputers 4        [verilog = logic]
 ECE 491 Engineering Seminar 1
 ECE 492 Senior Advanced Design Project I 1
 HIST 100 Hist. of Western Civilization
