@@ -1,27 +1,65 @@
-First	Semester Second	Semester
-CS	110	Essentials of Computer Science 3 CS	211	Object-Oriented 3
-CS	112		Intro	to	Computer	Programming 4 MATH	114	Analytic	Geometry	and	Calculus	II 4
-MATH	113		Analytic	Geometry	and	Calculus	I 4 Natural Science with lab 4
-Mason	Core* 3 Mason Core* 3
-Total	 14 Total 14
-Third	Semester Fourth	Semester
-CS 262 Intro Low-level Programming 3 CS 310 Data Structures 3
-Natural Science with lab 4 Natural Science with lab 4
-MATH 213 Calculus III 3 MATH 125 Discrete Mathematics 3
-Mason	Core* 3 Elective 3
-Mason	Core* 3 Mason	Core* 3
-Total 16 Total 16
-Fifth	Semester Sixth	Semester
-CS 330 Formal Methods & Models 3 CS 321 Software Engineering 3
-CS 367 Computer Systems & Programming 4 CS 483 Analysis of Algorithms 3
-MATH 203 Linear Algebra 3 STAT 344 Probability and Statistics 3
-ENGH 302 (Natural Science section) [MC]*** 3 CS-Related Elective 3
-Mason	Core* 3 Mason Core* 3
-Total 16 Total 15
-Seventh	Semester Eighth	Semester
-CS 306 Synthesis - Ethics & Law [MC] 3 Senior CS course 3
-CS 471 - Operating Systems 3 Senior CS course 3
-Senior CS Course 3 Senior CS course 3
-Senior CS Course 3 CS-related Elective 3
-Elective 3 Elective 2
-Total 15 Total 14
+First	Semester                                            
+CS	110	Essentials of Computer Science                    3 
+CS	112		Intro	to	Computer	Programming           4 
+MATH	113		Analytic	Geometry	and	Calculus	I 4 
+Mason	Core* 3                                             
+Total	 14                                                 
+
+Second	Semester
+CS	211	Object-Oriented 3
+MATH	114	Analytic	Geometry	and	Calculus	II 4
+Natural Science with lab 4
+Mason Core* 3
+Total 14
+
+
+Third	Semester                                             
+CS 262 Intro Low-level Programming 3                         
+Natural Science with lab 4                                   
+MATH 213 Calculus III 3                                      
+Mason	Core* 3                                              
+Mason	Core* 3                                              
+Total 16                                                     
+
+
+Fourth	Semester
+CS 310 Data Structures 3
+Natural Science with lab 4
+MATH 125 Discrete Mathematics 3
+Elective 3
+Mason	Core* 3
+Total 16
+
+
+Fifth	Semester                                                
+CS 330 Formal Methods & Models 3                                
+CS 367 Computer Systems & Programming 4                         
+MATH 203 Linear Algebra 3                                       
+ENGH 302 (Natural Science section) [MC]*** 3                    
+Mason	Core* 3                                                 
+Total 16                                                        
+
+Sixth	Semester
+CS 321 Software Engineering 3
+CS 483 Analysis of Algorithms 3
+STAT 344 Probability and Statistics 3
+CS-Related Elective 3
+Mason Core* 3
+Total 15
+
+Seventh	Semester                                 
+CS 306 Synthesis - Ethics & Law [MC] 3           
+CS 471 - Operating Systems 3                     
+Senior CS Course 3                               
+Senior CS Course 3                               
+Elective 3                                       
+Total 15                                         
+
+
+Eighth	Semester
+Senior CS course 3
+Senior CS course 3
+Senior CS course 3
+CS-related Elective 3
+Elective 2
+Total 14
