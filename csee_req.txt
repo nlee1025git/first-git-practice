@@ -28,12 +28,12 @@ Literature Elective. 3                      xxxx
 Total Hours 16
 
 Fourth Semester
-ECE 220 Signals and Systems I 3             
+ECE 220 Signals and Systems I 3             [ transistor] 
 *ECE 285 Electric Circuit Analysis I 3      [ transistor]
 ECE 331 Digital System Design 3             [ verilog = logic]
-ECE 332 Digital Electr. and Logic Design Lab 1
-MATH 214 Elem. Differential Equations 3
-CS 222 Computer Programming for Engineers 3
+ECE 332 Digital Electr. and Logic Design Lab 1   [verilog = logic]
+MATH 214 Elem. Differential Equations 3     [ xxxx  math?]
+CS 222 Computer Programming for Engineers 3 [ c progmming]
 Total Hours 16
 
 
