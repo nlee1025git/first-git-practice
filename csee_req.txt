@@ -1,15 +1,15 @@
 First Semester
-CS 112 Intro to Computer Programming 4
-ECON 103 Contemp. Microeconomic Prin. 3
-ENGH 101 Composition 3
-ENGR 107 Intro to Engineering 2
-MATH 113 Calculus I 4
+CS 112 Intro to Computer Programming 4   XXX
+ECON 103 Contemp. Microeconomic Prin. 3  XXX
+ENGH 101 Composition 3                   XXX
+ENGR 107 Intro to Engineering 2          [yes]
+MATH 113 Calculus I 4                    [this coming semester]
 Total Hours 16
 
 Second Semester
-CS 211 Object-Oriented Programming 3
-MATH 114 Analytic Geom. and Calculus II
-MATH 125 Discrete Math 3
+CS 211 Object-Oriented Programming 3    [yes]
+MATH 114 Analytic Geom. and Calculus II [engineering  yes]
+MATH 125 Discrete Math 3                [XXX          pass]
 PHYS 160 University Physics I 3
 PHYS 161 University Physics I Lab 1
 ECE 101 Intro. to Electrical and Computer Engg 3
