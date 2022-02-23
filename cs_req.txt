@@ -1,21 +1,21 @@
 First	Semester                                            
-CS	110	Essentials of Computer Science                    3 
-CS	112		Intro	to	Computer	Programming           4 
-MATH	113		Analytic	Geometry	and	Calculus	I 4 
+CS	110	Essentials of Computer Science            3 
+CS	112	Intro	to	Computer	Programming           4 [java  yes]
+MATH	113		Analytic	Geometry	and	Calculus	I   4 [yes]
 Mason	Core* 3                                             
 Total	 14                                                 
 
 Second	Semester
-CS	211	Object-Oriented 3
+CS	211	Object-Oriented 3                          [java: data structure  yes]
 MATH	114	Analytic	Geometry	and	Calculus	II 4
-Natural Science with lab 4
+Natural Science with lab 4                          physics lab
 Mason Core* 3
 Total 14
 
 
 Third	Semester                                             
-CS 262 Intro Low-level Programming 3                         
-Natural Science with lab 4                                   
+CS 262 Intro Low-level Programming 3                c programming           
+Natural Science with lab 4                          physics lab                       
 MATH 213 Calculus III 3                                      
 Mason	Core* 3                                              
 Mason	Core* 3                                              
