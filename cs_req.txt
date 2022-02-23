@@ -23,8 +23,8 @@ Total 16
 
 
 Fourth	Semester
-CS 310 Data Structures 3
-Natural Science with lab 4
+CS 310 Data Structures 3                             object oriented programming
+Natural Science with lab 4                           physics (modern physics)
 MATH 125 Discrete Mathematics 3
 Elective 3
 Mason	Core* 3
@@ -32,9 +32,9 @@ Total 16
 
 
 Fifth	Semester                                                
-CS 330 Formal Methods & Models 3                                
-CS 367 Computer Systems & Programming 4                         
-MATH 203 Linear Algebra 3                                       
+CS 330 Formal Methods & Models 3                   formal language *TOURING MACHINE                           
+CS 367 Computer Systems & Programming 4            FOUR DIFFEERENT PROGRAMMING LANGUAGE               
+MATH 203 Linear Algebra 3                          *LINEAR                
 ENGH 302 (Natural Science section) [MC]*** 3                    
 Mason	Core* 3                                                 
 Total 16                                                        
