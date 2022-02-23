@@ -1,6 +1,6 @@
 https://indico.cern.ch/event/799275/contributions/3413736/attachments/1861349/3059191/Petalinux_TutorialDemo.pdf
 https://www.youtube.com/watch?v=k03r2Ud42jY
-
+https://learning.oreilly.com/videos/learn-c-the/9780134434452/
 
 First	Semester                                            
 CS	110	Essentials of Computer Science            3 
