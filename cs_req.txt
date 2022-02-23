@@ -1,3 +1,7 @@
+https://indico.cern.ch/event/799275/contributions/3413736/attachments/1861349/3059191/Petalinux_TutorialDemo.pdf
+https://www.youtube.com/watch?v=k03r2Ud42jY
+
+
 First	Semester                                            
 CS	110	Essentials of Computer Science            3 
 CS	112	Intro	to	Computer	Programming           4 [java  yes]
