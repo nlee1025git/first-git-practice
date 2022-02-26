@@ -1,4 +1,5 @@
-    public static int diceRoll(int n, int outcome) {
+edit    
+public static int diceRoll(int n, int outcome) {
         int[][] result = new int[n][];    // n is dice_count
 
         for (int i = 0; i < n; i++) {     // when i=0 this is first dice
