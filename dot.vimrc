@@ -98,6 +98,7 @@ set expandtab
 
 "}}}
 
+" zR to open up all folding
 " --- Folding ---{{{
 set foldenable "enable folding
 set foldmethod=indent " use indents as fold markers
@@ -147,6 +148,8 @@ nnoremap <Leader>sv :so ~/.vimrc<CR>
 " generic source
 nnoremap <Leader>s :so ~/.vim/
 
+"vim session = alias
+"vim -S session_name to open
 " generic session save
 nnoremap <Leader>m :mksession! ~/.vim/
 
@@ -172,6 +175,8 @@ let g:plug_timeout=1000
 " plugin management
 call plug#begin('~/.vim/plugged')
 
+" search vim plugged and run curl and :PlugInstall
+
 " alternate files quickly
 Plug 'https://github.com/vim-scripts/a.vim'
 
@@ -181,6 +186,7 @@ Plug 'https://github.com/Rip-Rip/clang_complete'
 " ctrl-p - ESSENTIAL
 Plug 'https://github.com/ctrlpvim/ctrlp.vim'
 
+",1 to open file list
 " file browser
 Plug 'https://github.com/scrooloose/nerdtree'
 
@@ -201,6 +207,8 @@ Plug 'https://github.com/scrooloose/nerdtree'
 
 " easy grep
 Plug 'https://github.com/dkprice/vim-easygrep'
+
+"GrepOption to change directory and files
 
 " git wrapper
 "Plug 'https://github.com/tpope/vim-fugitive'
