@@ -18,7 +18,7 @@ void setNum();
 void updateBoard();
 void switchPlayer();
 int scanBestScore();
-int findBestScore(int nextNum);
+int findBestScore(int nextNum, int player);
 void updateScore();
 void printTableboard(int tempBoard[lines][size + 2], int row, int location);
 int calculateComputerWeight(int rowNum, int tempscoreBoard[lines][size + 2]);
@@ -30,6 +30,9 @@ void printLine(int lineNum, int select);
 int pickBestBoardNum();
 int twoInARow();
 void printPreview(int nextBoard[lines][size + 2]);
+void updateTempBoard(int nextPick);
+void updateScore2(int pickBestNum);
+void print();
 
 int main() {
     int count = 0;
@@ -51,43 +54,85 @@ int main() {
 }
 
 int twoInARow() {
-    int row = 0;
-    int tempScoreboard[lines][size + 2];
-    memcpy(tempScoreboard, scoreboard, sizeof(scoreboard));
+    int row = -1;
     for (int i = 0; i < lines; i++) {
-        tempScoreboard[i][size] = calculateComputerWeight(i, tempScoreboard);
-        tempScoreboard[i][size + 1] = calculateUserWeight(i, tempScoreboard);
-        // printf("line num: %d, cpu sum: %d, user sum: %d\n", i + 1, tempScoreboard[i][size], tempScoreboard[i][size + 1]);
-        if (tempScoreboard[i][size] == 5) {
+        if (scoreboard[i][size] >= 31) {
             row = i;
-        } else if (tempScoreboard[i][size + 1] == 5) {
+        // } else if (scoreboard[i][size + 1] >= 31) {
+        //     row = i;
+        } else if (scoreboard[i][size] >= 15) {
             row = i;
+        // } else if (scoreboard[i][size + 1] >= 15) {
+        //     row = i;
         }
         for (int j = 0; j < size; j++) {
-            if (scoreboard[row][j] == 0 && row > 0) {
+            if (scoreboard[row][j] == 0 && row >= 0) {
                 return lineNumbers[row][j];
             }
         }
     }
-    // if it's a negative number, there is no tow in a row
-    // there is no check
     return -1;
 }
 
+int scanBestScore() {
+    int fillNumCopy[size * size];
+    memcpy(fillNumCopy, fillNum, sizeof(fillNum));
+
+    int scoreboardCopy[lines][size + 2] = {0};
+    memcpy(scoreboardCopy, scoreboard, sizeof(scoreboard));
+
+    int checkLocation = twoInARow();
+    int pickBestLocation = pickBestBoardNum();
+    printf("\ncheckLocation is %d\n", checkLocation);
+    if (checkLocation > 0) {
+        return checkLocation;
+    }
+
+    printf("cpu's pickBestLocation is %d\n\n", pickBestLocation);
+    fillNum[pickBestLocation - 1] = -1;
+    updateScore2(pickBestLocation);
+    print();
+    updateBoard();
+    switchPlayer();
+
+    int userBestLocation = pickBestBoardNum();
+    printf("user's pickBestLocation is %d\n\n", userBestLocation);
+    fillNum[userBestLocation - 1] = 1;
+    updateScore2(userBestLocation);
+    print();
+    updateBoard();
+    switchPlayer();
+
+    int prevPickBestLocation = pickBestLocation;
+    pickBestLocation = pickBestBoardNum();
+    printf("cpu's pickBestLocation is %d\n\n", pickBestLocation);
+    fillNum[pickBestLocation - 1] = -1;
+    updateScore2(pickBestLocation);
+    print();
+    updateBoard();
+
+    memcpy(scoreboard, scoreboardCopy, sizeof(scoreboard));
+    memcpy(fillNum, fillNumCopy, sizeof(fillNum));
+
+    return prevPickBestLocation;
+}
+
 int pickBestBoardNum() {
-    int select = 0;
+    if (player == 1) {
+        printf("\n\n*** user turn ***\n\n");
+    } else {
+        printf("\n\n*** cpu turn ***\n\n");
+    }
     int max = -100;
     int location = 0;
     for (int i = 1; i <= size * size; i++) {
         if (fillNum[i - 1] == 0) {
-            // printf("------ %d ------\n", i);
-            int temp = findBestScore(i);
+            // printf("--- %d ---\n", i);
+            // updateBoard();
+            int temp = findBestScore(i, player);
             if (temp == max) {
                 location = compareTwo(location, i);
             }
-            // select maximum
-            // max register stores maximum advangtageous
-            // value of the next pickNum
             if (temp > max) {
                 max = temp;
                 location = i;
@@ -97,80 +142,96 @@ int pickBestBoardNum() {
     return location;
 }
 
-int scanBestScore() {
-    // if checkLocation is positive, there is a two in a row
-    int checkLocation = twoInARow();
-    int pickBestLocation = pickBestBoardNum();
-    printf("checkLocation: %d, pickBestLocation: %d\n", checkLocation, pickBestLocation);
-    
-    // check is found only for checkLocation
-    // then compare the checkLocation and pickBestLocation
-    if (checkLocation > 0) {
-        // need check for pickBestLocation
-        if (checkLocation == pickBestLocation) {
-            return checkLocation;
-        } else {
-            printf("error: checkLocation does not match with pickBestNumber\n");
-            printf("checkLocation: %d, and pickBestLocation: %d\n", checkLocation, pickBestLocation);
+int findBestScore(int num, int player) {
+    int maxWeight = 0;
+    int row = -1;
+    int location = -1;
+    int tempScoreboard[lines][size + 2] = {0};
+    int tempScoreboardDelta[lines][size + 2] = {0};
+
+    for (int i = 0; i < lines; i++) {
+        for (int j = 0; j < size; j++) {
+            tempScoreboard[i][j] = scoreboard[i][j];
         }
     }
 
-    int fillNumCopy[size * size] = {0};
-    memcpy(fillNumCopy, fillNum, sizeof(fillNum));
-    // int selectedNum = pickBestLocation;
-    // int nextBoard[lines][size + 2] = {0};
-    // memcpy(nextBoard, scoreboard, sizeof(scoreboard));
-    // for (int i = 0; i < lines; i++) {
-    //     for (int j = 0; j < size; j++) {
-    //         if (lineNumbers[i][j] == selectedNum) {
-    //             nextBoard[i][j] = -1;
-    //         }
-    //     }
-    // }
-    // printPreview(nextBoard);
+    // printf("player is %d\n", player);
+    
+    for (int i = 0; i < lines; i++) {
+        for (int j = 0; j < size; j++) {
+            tempScoreboardDelta[i][j] = tempScoreboard[i][j];
+            if (lineNumbers[i][j] == num && player == 2) {
+                tempScoreboard[i][j] = -1;
+                row = i;
+                location = j;
+            } else if (lineNumbers[i][j] == num && player == 1) {
+                tempScoreboard[i][j] = 1;
+                row = i;
+                location = j;
+            }
+            if (lineNumbers[i][j] == lineNumbers[row][location]) {
+                tempScoreboard[i][size] = calculateComputerWeight(i, tempScoreboard);
+                tempScoreboard[i][size + 1] = calculateUserWeight(i, tempScoreboard);
+                int temp = scoreboard[i][size] - tempScoreboard[i][size];
+                int temp1 = scoreboard[i][size + 1] - tempScoreboard[i][size + 1];
+                if (temp < 0) {
+                    temp = -1 * temp;
+                }
+                if (temp1 < 0) {
+                    temp1 = -1 * temp1;
+                }
+                tempScoreboardDelta[i][size] = temp;
+                tempScoreboardDelta[i][size + 1] = temp1;
+                if (maxWeight < temp) {
+                    maxWeight = temp;
+                }
+            }
+        }
+    }
+    // printf("%d's maxWeight: %d\n", num, maxWeight);
+    return maxWeight;
+}
 
-    fillNum[pickBestLocation - 1] = -1;
-    printf("\n**** cup's best num\n");
-    updateBoard();
-    printf("****\n");
-
-    // for (int i = 0; i < size * size; i++) {
-    //     printf("%d ", fillNum[i]);
-    // }
-    // printf("\n");
-
-    int fillNumCopy2[size * size] = {0};
-    memcpy(fillNumCopy2, fillNum, sizeof(fillNum));
-
+int checkBestBoardNum() {
     int max = -100;
     int location = -1;
+    printf("\nuser turn scanning\n");
     for (int i = 1; i <= size * size; i++) {
         if (fillNum[i - 1] == 0) {
-            int temp = findBestScore(i);
-            printf("%d) temp: %d, max: %d\n", i, temp, max);
+            int temp = findBestScore(i, player);
+            // printf("--- %d ---\n", i);
+//            printf("%d) temp: %d, max: %d\n", i, temp, max);
             fillNum[i - 1] = 1;
             updateBoard();
             if (temp == max) {
-//                location = compareTwo(location, i);
+                location = compareTwo(location, i);
             }
             if (temp > max) {
                 max = temp;
                 location = i;
             }
         }
-        memcpy(fillNum, fillNumCopy2, sizeof(fillNum));
+//        memcpy(fillNum, fillNumCopy2, sizeof(fillNum));
     }
-    printf("\nafter user's run\n");
-    printf("max is %d, and location is %d\n", max, location);
+    return 1;
+}
 
-    fillNum[location - 1] = 1;
-    printf("\n****\n");
-    updateBoard();
-    printf("****\n\n");
-
-    memcpy(fillNum, fillNumCopy, sizeof(fillNum));
-
-    return pickBestLocation;
+void updateTempBoard(int nextPick) {
+    for (int i = 0; i < lines; i++) {
+        for (int j = 0; j < size; j++) {
+            if (player == 1) {
+                if (lineNumbers[i][j] == nextPick) {
+                    scoreboard[i][j] = 1;
+                }
+            } else {
+                if (lineNumbers[i][j] == nextPick) {
+                    scoreboard[i][j] = -1;
+                }
+            }
+        }
+        scoreboard[i][size] = calculateComputerWeight(i, scoreboard);
+        scoreboard[i][size + 1] = calculateUserWeight(i, scoreboard);
+    }
 }
 
 void printPreview(int nextBoard[lines][size + 2]) {
@@ -201,11 +262,19 @@ int compareTwo(int prevNum, int curNum) {
     int cur = 0;
     for (int i = 0; i < lines; i++) {
         for (int j = 0; j < size; j++) {
-            if (lineNumbers[i][j] == prevNum && scoreboard[i][j] == 0) {
-                prev++;
+            if (lineNumbers[i][j] == prevNum) {
+                for (int k = 0; k < size; k++) {
+                    if (scoreboard[i][k] == 0) {
+                        prev++;
+                    }
+                }
             }
-            if (lineNumbers[i][j] == curNum && scoreboard[i][j] == 0) {
-                cur++;
+            if (lineNumbers[i][j] == curNum) {
+                for (int k = 0; k < size; k++) {
+                    if (scoreboard[i][k] == 0) {
+                        cur++;
+                    }
+                }
             }
         }
     }
@@ -214,7 +283,6 @@ int compareTwo(int prevNum, int curNum) {
     } else if (prev > cur) {
         return prevNum;
     } else {
-        // int curLine = checkUserPoint(cur);
         return prevNum;
     }
 }
@@ -240,109 +308,6 @@ int checkUserPoint(int num) {
         }
     }
     return count;
-}
-
-int findBestScore(int num) {
-    // input require is empty location
-    // output is maxWeight
-    int maxWeight = 0;
-    int row = -1;
-    int location = -1;
-    int tempScoreboardPre[lines][size + 2] = {0};
-    int tempScoreboard[lines][size + 2] = {0};
-    int tempScoreboardDelta[lines][size + 2] = {0};
-    // copy scoreboard
-    for (int i = 0; i < lines; i++) {
-        for (int j = 0; j < size; j++) {
-            tempScoreboardPre[i][j] = scoreboard[i][j];
-        }
-        tempScoreboardPre[i][size] = calculateComputerWeight(i, tempScoreboardPre);
-        tempScoreboardPre[i][size + 1] = calculateUserWeight(i, tempScoreboardPre);
-    }
-
-    for (int i = 0; i < lines; i++) {
-        for (int j = 0; j < size; j++) {
-            tempScoreboard[i][j] = scoreboard[i][j];
-        }
-    }
-
-    for (int i = 0; i < lines; i++) {
-        for (int j = 0; j < size; j++) {
-            // if (i == 7) {
-            //     printf("(before) *******************\n");
-            //     for (int i = 0; i < lines; i++) {
-            //         for (int j = 0; j < size; j++) {
-            //             printf("%d ", tempScoreboard[i][j]);
-            //         }
-            //         printf("\n");
-            //     }
-            //     printf("*******************\n");
-            // }
-            tempScoreboardDelta[i][j] = tempScoreboard[i][j];
-            if (lineNumbers[i][j] == num) {
-                tempScoreboard[i][j] = -1;
-                row = i;
-                location = j;
-            }
-            // printf("=======================   i: %d, j: %d, row: %d, location: %d, ln1: %d, ln2: %d\n", i, j, row, location, lineNumbers[i][j], lineNumbers[row][location]);
-            if (lineNumbers[i][j] == lineNumbers[row][location]) {
-                // if (i == 7) {
-                //     printf("(after) *******************\n");
-                //     for (int i = 0; i < lines; i++) {
-                //         for (int j = 0; j < size; j++) {
-                //             printf("%d ", tempScoreboard[i][j]);
-                //         }
-                //         printf("\n");
-                //     }
-                //     printf("*******************\n");
-                // }
-                tempScoreboard[i][size] = calculateComputerWeight(i, tempScoreboard);
-                tempScoreboard[i][size + 1] = calculateUserWeight(i, tempScoreboard);
-                // printf("tempScorebardPre[i][size] = %d, tempScoreboard[i][size] = %d\n", tempScoreboardPre[i][size], tempScoreboard[i][size]);
-                int temp = tempScoreboardPre[i][size] - tempScoreboard[i][size];
-                int temp1 = tempScoreboardPre[i][size + 1] - tempScoreboard[i][size + 1];
-                if (temp < 0) {
-                    temp = -1 * temp;
-                }
-                if (temp1 < 0) {
-                    temp1 = -1 * temp1;
-                }
-                tempScoreboardDelta[i][size] = temp;
-                tempScoreboardDelta[i][size + 1] = temp1;
-                if (maxWeight < temp) {
-                    maxWeight = temp;
-                }
-                // printf("tempScoreboard[i][size] = %d, tempScoreboardPre[i][size] = %d, tempScoreboardDelta[i][size] = %d\n", tempScoreboard[i][size], tempScoreboardPre[i][size], tempScoreboardDelta[i][size]);
-                // printf("num: %d, i(row): %d, j(location): %d, maxWeight: %d, temp: %d\n", num, row, location, maxWeight, temp);
-                // printf("%d ", tempScoreboard[i][j]);
-                // printf("%d %d", tempScoreboard[i][size], tempScoreboard[i][size + 1]);
-            }
-        }
-        // tempScoreboard[i][size] = calculateComputerWeight(i, tempScoreboard);
-        // tempScoreboard[i][size + 1] = calculateUserWeight(i, tempScoreboard);
-        // printf("tempScorebardPre[i][size] = %d, tempScoreboard[i][size] = %d\n", tempScoreboardPre[i][size], tempScoreboard[i][size]);
-        // int temp = tempScoreboardPre[i][size] - tempScoreboard[i][size];
-        // printf("%d: (before) temp is %d\n", i, temp);
-        // int temp1 = tempScoreboardPre[i][size + 1] - tempScoreboard[i][size + 1];
-        // if (temp < 0) {
-        //     temp = -1 * temp;
-        // }
-        // if (temp1 < 0) {
-        //     temp1 = -1 * temp1;
-        // }
-        // printf("%d: (after) temp is %d\n", i, temp);
-        // tempScoreboardDelta[i][size] = temp;
-        // tempScoreboardDelta[i][size + 1] = temp1;
-        // if (maxWeight < temp) {
-        //     maxWeight = temp;
-        //     printf("tempScoreboard[i][size] = %d, tempScoreboardPre[i][size] = %d, tempScoreboardDelta[i][size] = %d\n", tempScoreboard[i][size], tempScoreboardPre[i][size], tempScoreboardDelta[i][size]);
-        //     printf("num: %d, i: %d, j: %d, maxWeight: %d, temp: %d\n", num, i, location, maxWeight, temp);
-        // }
-    }
-    // printTableboard(tempScoreboard, row, location);
-    // printf("Delta scoreboard\n");
-    // printTableboard(tempScoreboardDelta, row, location);
-    return maxWeight;
 }
 
 void printTableboard(int tempBoard[lines][size + 2], int row, int location) {
@@ -484,23 +449,60 @@ void updateScore() {
     }
 }
 
+void updateScore2(int pickBestNum) {
+    for (int i = 0; i < lines; i++) {
+        for (int j = 0; j < size; j++) {
+            if (player == 1) {
+                if (lineNumbers[i][j] == pickBestNum) {
+                    scoreboard[i][j] = 1;
+                }
+            } else {
+                if (lineNumbers[i][j] == pickBestNum) {
+                    scoreboard[i][j] = -1;
+                }
+            }
+        }
+        scoreboard[i][size] = calculateComputerWeight(i, scoreboard);
+        scoreboard[i][size + 1] = calculateUserWeight(i, scoreboard);
+    }
+}
+
+void print() {
+    for (int i = 0; i < lines; i++) {
+        printf("%d: ", i + 1);
+        for (int j = 0; j < size + 2; j++) {
+            printf("%2d ", scoreboard[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+
+    // int seq = 1;
+    // for (int i = 0; i < 3; i++) {
+    //     if (i == 0) {
+    //         printf("line#: ");
+    //     } else if (i == 1) {
+    //         printf("csum:  ");
+    //     } else {
+    //         printf("usum:  ");
+    //     }
+    //     for (int j = 0; j < lines; j++) {
+    //         if (i == 0) {
+    //             printf("%2d ", seq++);
+    //         } else {
+    //             printf("%2d ", scoreboard[j][size - 1 + i]);
+    //         }
+    //     }
+    //     printf("\n");
+    // }
+    // printf("\n");
+}
+
 int calculateComputerWeight(int rowNum, int tempscoreBoard[lines][size + 2]) {
-    // x = computer, o = user
     int oCount = 0;
     int xCount = 0;
     int nCount = 0;
     int rtnValue = 0;
-    // if (rowNum == 7) {
-        // printf("*******************\n");
-        // for (int i = 0; i < lines; i++) {
-        //     for (int j = 0; j < size; j++) {
-        //         printf("%d ", tempscoreBoard[i][j]);
-        //     }
-        //     printf("\n");
-        // }
-        // printf("*******************\n");
-    // }
-
     for (int i = 0; i < size; i++) {
         if (tempscoreBoard[rowNum][i] == 1) {
             oCount++;
@@ -529,7 +531,6 @@ int calculateComputerWeight(int rowNum, int tempscoreBoard[lines][size + 2]) {
 }
 
 int calculateUserWeight(int rowNum, int tempscoreBoard[lines][size + 2]) {
-    // o = user, x = computer
     int oCount = 0;
     int xCount = 0;
     int nCount = 0;
