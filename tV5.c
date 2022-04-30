@@ -4,12 +4,15 @@
 #include <stdbool.h>
 #include <string.h>
 
-#define bingo 2
-#define size 3
+#define bingo 3
+#define size 5
+#define boarderSize bingo - 1
+#define LSIZE(size, borderSize) (size + borderSize + borderSize) // multiplication is not allowed
 #define eachNumLines 8
 
 int player;
 int numPick;
+int initArray[size + boarderSize * 2][size + boarderSize * 2] = {0};
 int lineNumbers[size * size][eachNumLines][bingo] = {0};
 
 void initData();
@@ -39,15 +42,56 @@ int main() {
 
 void initData() {
     printf("\n");
-    int index = 1;
-    for (int i = 0; i < size; i++) {
-        // printf(" ");
-        for (int j = 0; j < size; j++) {
-            printf("%2d ", index++);
+    for (int i = 0; i < size + boarderSize * 2; i++) {
+        for (int j = 0; j < size + boarderSize * 2; j++) {
+            initArray[i][j] = -5;
+            printf("%2d ", initArray[i][j]);
         }
         printf("\n");
     }
     printf("\n");
+
+    int Idx = 0;
+    int initValue = 0;
+
+    for (int i = 0; i < LSIZE(size, boarderSize); i++) {        
+        for (int j = 0; j < LSIZE(size, boarderSize); j++) {
+            initValue = -2;
+            if (j < boarderSize) {
+                initValue = -1 * (boarderSize - j);
+                printf("%2d ", -1 * (boarderSize - j));
+            } else if (j >= boarderSize && j < size + boarderSize) {
+                if (i < boarderSize) {
+                    initValue = -1 * (boarderSize - i);
+                    printf("%2d ", -1 * (boarderSize - i));
+                } else if (i >= size + boarderSize) {
+                    // printf("i is %d\n", i);
+                    initValue = (-1 * (size + 2 * boarderSize - i - 1) + boarderSize + 1) * -1;
+                    printf("%2d ", (-1 * (size + 2 * boarderSize - i - 1) + boarderSize + 1) * -1);
+                } else {
+                    initValue = ++Idx;
+                    printf("%2d ", ++Idx);
+                }
+            } else {
+            // } else if (j >= size + boarderSize && j < size + boarderSize * 2 - j) {
+                initValue = size + boarderSize * 2 - j;
+                printf("%2d ", size + boarderSize * 2 - j);
+            }
+            initArray[i][j] = initValue;
+        }
+        printf("\n");
+    }
+    printf("\n");
+
+    for (int i = 0; i < size + boarderSize * 2; i++) {
+        for (int j = 0; j < size + boarderSize * 2; j++) {
+            initArray[i][j] = -5;
+            printf("%2d ", initArray[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+
     printf("1. user    2. computer: ");
     scanf("%d", &player);
 }
@@ -92,5 +136,7 @@ int addNums(int numPick) {
 }
 
 void north() {
-    for (int i = 0; i < bingo; i++)
+    for (int i = 0; i < bingo; i++) {
+        
+    }
 }
