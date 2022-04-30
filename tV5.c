@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <string.h>
 
-#define size 3
+#define size 5
 #define lines size * 2 + 2
 
 int player;
@@ -21,14 +21,14 @@ int scanBestScore();
 int findBestScore(int nextNum, int player);
 void updateScore();
 void printTableboard(int tempBoard[lines][size + 2], int row, int location);
-int calculateComputerWeight(int rowNum, int tempscoreBoard[lines][size + 2]);
-int calculateUserWeight(int rowNum, int tempBoard[lines][size + 2]);
+int calculateComputerWeight(int player, int rowNum, int tempscoreBoard[lines][size + 2]);
+int calculateUserWeight(int player, int rowNum, int tempBoard[lines][size + 2]);
 void updateTempScore();
 int compareTwo(int prevNum, int curNum);
 int checkUserPoint(int num);
 void printLine(int lineNum, int select);
 int pickBestBoardNum();
-int twoInARow();
+// int twoInARow();
 void printPreview(int nextBoard[lines][size + 2]);
 void updateTempBoard(int nextPick);
 void updateScore2(int pickBestNum);
@@ -53,26 +53,26 @@ int main() {
     return 0;
 }
 
-int twoInARow() {
-    int row = -1;
-    for (int i = 0; i < lines; i++) {
-        if (scoreboard[i][size] >= 31) {
-            row = i;
-        // } else if (scoreboard[i][size + 1] >= 31) {
-        //     row = i;
-        } else if (scoreboard[i][size] >= 15) {
-            row = i;
-        // } else if (scoreboard[i][size + 1] >= 15) {
-        //     row = i;
-        }
-        for (int j = 0; j < size; j++) {
-            if (scoreboard[row][j] == 0 && row >= 0) {
-                return lineNumbers[row][j];
-            }
-        }
-    }
-    return -1;
-}
+// int twoInARow() {
+//     int row = -1;
+//     for (int i = 0; i < lines; i++) {
+//         if (scoreboard[i][size] >= 31) {
+//             row = i;
+//         // } else if (scoreboard[i][size + 1] >= 31) {
+//         //     row = i;
+//         } else if (scoreboard[i][size] >= 15) {
+//             row = i;
+//         // } else if (scoreboard[i][size + 1] >= 15) {
+//         //     row = i;
+//         }
+//         for (int j = 0; j < size; j++) {
+//             if (scoreboard[row][j] == 0 && row >= 0) {
+//                 return lineNumbers[row][j];
+//             }
+//         }
+//     }
+//     return -1;
+// }
 
 int scanBestScore() {
     int fillNumCopy[size * size];
@@ -81,12 +81,12 @@ int scanBestScore() {
     int scoreboardCopy[lines][size + 2] = {0};
     memcpy(scoreboardCopy, scoreboard, sizeof(scoreboard));
 
-    int checkLocation = twoInARow();
+    // int checkLocation = twoInARow();
     int pickBestLocation = pickBestBoardNum();
-    printf("\ncheckLocation is %d\n", checkLocation);
-    if (checkLocation > 0) {
-        return checkLocation;
-    }
+    printf("\ncheckLocation is %d\n", pickBestLocation);
+    // if (checkLocation > 0) {
+    //     return checkLocation;
+    // }
 
     printf("cpu's pickBestLocation is %d\n\n", pickBestLocation);
     fillNum[pickBestLocation - 1] = -1;
@@ -151,6 +151,7 @@ int findBestScore(int num, int player) {
 
     for (int i = 0; i < lines; i++) {
         for (int j = 0; j < size; j++) {
+            // only copy the board numbers
             tempScoreboard[i][j] = scoreboard[i][j];
         }
     }
@@ -160,6 +161,7 @@ int findBestScore(int num, int player) {
     for (int i = 0; i < lines; i++) {
         for (int j = 0; j < size; j++) {
             tempScoreboardDelta[i][j] = tempScoreboard[i][j];
+            // 
             if (lineNumbers[i][j] == num && player == 2) {
                 tempScoreboard[i][j] = -1;
                 row = i;
@@ -169,19 +171,33 @@ int findBestScore(int num, int player) {
                 row = i;
                 location = j;
             }
+            // temp = cpu, temp1 = user
             if (lineNumbers[i][j] == lineNumbers[row][location]) {
-                tempScoreboard[i][size] = calculateComputerWeight(i, tempScoreboard);
-                tempScoreboard[i][size + 1] = calculateUserWeight(i, tempScoreboard);
+                // printf("i is %d, num: %d, player: %d\n", i, num, player);
+                tempScoreboard[i][size] = calculateComputerWeight(player, i, tempScoreboard);
+                tempScoreboard[i][size + 1] = calculateUserWeight(player, i, tempScoreboard);
                 int temp = scoreboard[i][size] - tempScoreboard[i][size];
+                // printf("cpu scoreboard value: %d, and tempboard value: %d\n", scoreboard[i][size], tempScoreboard[i][size]);
                 int temp1 = scoreboard[i][size + 1] - tempScoreboard[i][size + 1];
+                // printf("user scoreboard value: %d, and tempboard value: %d\n", scoreboard[i][size + 1], tempScoreboard[i][size + 1]);
                 if (temp < 0) {
                     temp = -1 * temp;
                 }
                 if (temp1 < 0) {
                     temp1 = -1 * temp1;
                 }
+                // if (row == 4 - 1) {
+                //     // printf("row number is %d, and absolute value of user is %d\n", row, temp1);
+                //     // printf("row number is %d, and absolute value of cpu is %d\n", row, temp);
+                // }
+                // if (row == 9 - 1) {
+                //     // printf("row number is %d, and absolute value of user is %d\n", row, temp1);
+                //     // printf("row number is %d, and absolute value of cpu is %d\n", row, temp);
+                // }
                 tempScoreboardDelta[i][size] = temp;
                 tempScoreboardDelta[i][size + 1] = temp1;
+                // printf("maxWeight: %d, temp: %d, temp1: %d, player: %d\n", maxWeight, temp, temp1, player);
+                // TODO: is it right?
                 if (maxWeight < temp) {
                     maxWeight = temp;
                 }
@@ -229,8 +245,8 @@ void updateTempBoard(int nextPick) {
                 }
             }
         }
-        scoreboard[i][size] = calculateComputerWeight(i, scoreboard);
-        scoreboard[i][size + 1] = calculateUserWeight(i, scoreboard);
+        scoreboard[i][size] = calculateComputerWeight(player, i, scoreboard);
+        scoreboard[i][size + 1] = calculateUserWeight(player, i, scoreboard);
     }
 }
 
@@ -302,7 +318,7 @@ int checkUserPoint(int num) {
         int line = 0;
         for (int j = 0; j < size; j++) {
             if (lineNumbers[i][j] == num) {
-                line = calculateUserWeight(i, scoreboard);
+                line = calculateUserWeight(player, i, scoreboard);
                 // printf("line is %d\n", line);
             }
         }
@@ -444,8 +460,8 @@ void updateScore() {
                 }
             }
         }
-        scoreboard[i][size] = calculateComputerWeight(i, scoreboard);
-        scoreboard[i][size + 1] = calculateUserWeight(i, scoreboard);
+        scoreboard[i][size] = calculateComputerWeight(player, i, scoreboard);
+        scoreboard[i][size + 1] = calculateUserWeight(player, i, scoreboard);
     }
 }
 
@@ -462,8 +478,8 @@ void updateScore2(int pickBestNum) {
                 }
             }
         }
-        scoreboard[i][size] = calculateComputerWeight(i, scoreboard);
-        scoreboard[i][size + 1] = calculateUserWeight(i, scoreboard);
+        scoreboard[i][size] = calculateComputerWeight(player, i, scoreboard);
+        scoreboard[i][size + 1] = calculateUserWeight(player, i, scoreboard);
     }
 }
 
@@ -498,7 +514,8 @@ void print() {
     // printf("\n");
 }
 
-int calculateComputerWeight(int rowNum, int tempscoreBoard[lines][size + 2]) {
+int calculateComputerWeight(int player, int rowNum, int tempscoreBoard[lines][size + 2]) {
+    // o = user, x = cpu
     int oCount = 0;
     int xCount = 0;
     int nCount = 0;
@@ -518,19 +535,26 @@ int calculateComputerWeight(int rowNum, int tempscoreBoard[lines][size + 2]) {
         rtnValue = 3;
     } else if (oCount == 0 && xCount == 1) {
         rtnValue = 7;
-    } else if (oCount == 2 && xCount == 0) {
+    // if player is 2 and user [o] is 2 and x is already on
+    // this is second best case
+    } else if (oCount == (size - 1) && xCount == 0 && player == 2) {
         rtnValue = 15;
-    } else if (oCount == 0 && xCount == 2) {
+        // printf("player is %d, and rtnValue is %d, row number is %d\n", player, rtnValue, rowNum);
+    } else if (oCount == (size - 1) && xCount == 0 && player == 1) {
+        rtnValue = 46 * 2;
+        // printf("46) player is %d, and rtnValue is %d, row number is %d\n", player, rtnValue, rowNum);
+    } else if (oCount == 0 && xCount == (size - 1)) {
         rtnValue = 31;
-    } else if (oCount == 0 && xCount == 3) {
-        rtnValue = 63;
+        // printf("31) player is %d, and rtnValue is %d, row number is %d\n", player, rtnValue, rowNum);
+    } else if (oCount == 0 && xCount == size) {
+        rtnValue = 63 * 2;
     } else if (oCount == 1 && xCount == 1) {
         rtnValue = 0;
     }
     return rtnValue;
 }
 
-int calculateUserWeight(int rowNum, int tempscoreBoard[lines][size + 2]) {
+int calculateUserWeight(int player, int rowNum, int tempscoreBoard[lines][size + 2]) {
     int oCount = 0;
     int xCount = 0;
     int nCount = 0;
@@ -550,9 +574,13 @@ int calculateUserWeight(int rowNum, int tempscoreBoard[lines][size + 2]) {
         rtnValue = 3;
     } else if (oCount == 1 && xCount == 0) {
         rtnValue = 7;
-    } else if (oCount == 0 && xCount == 2) {
+    } else if (oCount == 0 && xCount == (size - 1) && player == 1) {
         rtnValue = 15;
-    } else if (oCount == 2 && xCount == 0) {
+        // printf("(userweight) player is %d, and rtnValue is %d, row number is %d\n", player, rtnValue, rowNum);
+    } else if (oCount == 0 && xCount == (size - 1) && player == 2) {
+        rtnValue = 46 * 2;
+        // printf("(userweight) player is %d, and rtnValue is %d, row number is %d\n", player, rtnValue, rowNum);
+    } else if (oCount == (size - 1) && xCount == 0) {
         rtnValue = 31;
     } else if (oCount == 1 && xCount == 1) {
         rtnValue = 0;
