@@ -6,33 +6,40 @@
 
 #define bingo 3
 #define size 5
-#define boarderSize bingo - 1
-#define LSIZE(size, borderSize) (size + borderSize + borderSize) // multiplication is not allowed
-#define eachNumLines 8
+#define boarderSize (bingo - 1)
+#define LongSize size + boarderSize * 2
+#define adjacentLines 8
 
 int player;
 int numPick;
-int initArray[size + boarderSize * 2][size + boarderSize * 2] = {0};
-int lineNumbers[size * size][eachNumLines][bingo] = {0};
+int playCount = 0;
+int numSeq = 0;
+int fillNum[size * size];
+int initArray[LongSize][LongSize];
+int lineNumbers[size * size][adjacentLines][bingo];
+int defaultLineNumbers[size * size][adjacentLines][bingo];
+int adjacentNumbers[size * size];
 
 void initData();
-void setBoard();
 void printBoard();
-int addNums(int numPick);
+void setDefaultLineNumbers();
+void updateBoard();
+void switchPlayer();
+void setNum();
+int getBestAdjacentNumber();
 
 int main() {
-    int count = 0;
     srand(time(0));
     initData();
-    // setBoard();
-    printBoard();
+    setDefaultLineNumbers();
 
     while (1) {
-        printf("pick a num: ");
-        scanf("%d", &numPick);
+        setNum();
+        updateBoard();
+        switchPlayer();
         
-        count++;
-        if (count == size * size) {
+        playCount++;
+        if (playCount == size * size) {
             printf("draw game\n");
             break;
         }
@@ -41,51 +48,30 @@ int main() {
 }
 
 void initData() {
-    printf("\n");
-    for (int i = 0; i < size + boarderSize * 2; i++) {
-        for (int j = 0; j < size + boarderSize * 2; j++) {
-            initArray[i][j] = -5;
-            printf("%2d ", initArray[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-
-    int Idx = 0;
-    int initValue = 0;
-
-    for (int i = 0; i < LSIZE(size, boarderSize); i++) {        
-        for (int j = 0; j < LSIZE(size, boarderSize); j++) {
-            initValue = -2;
+    int index = 1;
+    for (int i = 0; i < LongSize; i++) {        
+        for (int j = 0; j < LongSize; j++) {
+            // left boarder line
             if (j < boarderSize) {
-                initValue = -1 * (boarderSize - j);
-                printf("%2d ", -1 * (boarderSize - j));
+                initArray[i][j] = j - boarderSize;
+            // middle boarder line
             } else if (j >= boarderSize && j < size + boarderSize) {
                 if (i < boarderSize) {
-                    initValue = -1 * (boarderSize - i);
-                    printf("%2d ", -1 * (boarderSize - i));
+                    initArray[i][j] = i - boarderSize;
                 } else if (i >= size + boarderSize) {
-                    // printf("i is %d\n", i);
-                    initValue = (-1 * (size + 2 * boarderSize - i - 1) + boarderSize + 1) * -1;
-                    printf("%2d ", (-1 * (size + 2 * boarderSize - i - 1) + boarderSize + 1) * -1);
+                    initArray[i][j] = boarderSize + size - i - 1;
                 } else {
-                    initValue = ++Idx;
-                    printf("%2d ", ++Idx);
+                    initArray[i][j] = index++;
                 }
+            // right borader line
             } else {
-            // } else if (j >= size + boarderSize && j < size + boarderSize * 2 - j) {
-                initValue = size + boarderSize * 2 - j;
-                printf("%2d ", size + boarderSize * 2 - j);
+                initArray[i][j] = (size - 1) + boarderSize - j;
             }
-            initArray[i][j] = initValue;
         }
-        printf("\n");
     }
-    printf("\n");
 
-    for (int i = 0; i < size + boarderSize * 2; i++) {
-        for (int j = 0; j < size + boarderSize * 2; j++) {
-            initArray[i][j] = -5;
+    for (int i = 0; i < LongSize; i++) {
+        for (int j = 0; j < LongSize; j++) {
             printf("%2d ", initArray[i][j]);
         }
         printf("\n");
@@ -96,25 +82,14 @@ void initData() {
     scanf("%d", &player);
 }
 
-void setBoard() {
-    int seq = 1;
-    for (int i = 0; i < size; i++) {
-        for (int j = 0; j < size; j++) {
-            for (int k = 0; k < eachNumLines; k++) {
-                lineNumbers[i][j][k] = seq++;
-            }
-        }
-    }
-}
-
 void printBoard() {
     printf("\n");
     for (int i = 0; i < size * size; i++) {
         printf("\n   board %d\n", i + 1);
-        for (int j = 0; j < eachNumLines; j++) {
+        for (int j = 0; j < adjacentLines; j++) {
             printf("line %d: ", j + 1);
             for (int k = 0; k < bingo; k++) {
-                printf("%2d ", lineNumbers[i][j][k]);
+                printf("%2d ", defaultLineNumbers[i][j][k]);
             }
             printf("\n");
         }
@@ -122,21 +97,135 @@ void printBoard() {
     printf("\n");
 }
 
-int addNums(int numPick) {
+void setDefaultLineNumbers() {
+    int count = 0;
+    int x = boarderSize;
     for (int i = 0; i < size * size; i++) {
-        for (int j = 0; j < eachNumLines; j++) {
+        for (int j = 0; j < adjacentLines; j++) {
+            int y = boarderSize + i % size;
             for (int k = 0; k < bingo; k++) {
-                if (numPick == 1) {
-                    lineNumbers[i][j][k] = numPick;
+                if (k == 0) {
+                    defaultLineNumbers[i][j][k] = i + 1;
+                } else {
+                    if (j == 0) {
+                        defaultLineNumbers[i][j][k] = initArray[x][++y];
+                    } else if (j == 1) {
+                        defaultLineNumbers[i][j][k] = initArray[++x][++y];                    
+                    } else if (j == 2) {
+                        defaultLineNumbers[i][j][k] = initArray[++x][y];                    
+                    } else if (j == 3) {
+                        defaultLineNumbers[i][j][k] = initArray[++x][--y];                    
+                    } else if (j == 4) {
+                        defaultLineNumbers[i][j][k] = initArray[x][--y];                    
+                    } else if (j == 5) {
+                        defaultLineNumbers[i][j][k] = initArray[--x][--y];                    
+                    } else if (j == 6) {
+                        defaultLineNumbers[i][j][k] = initArray[--x][y];                    
+                    } else {
+                        defaultLineNumbers[i][j][k] = initArray[--x][++y];
+                    }
+                }
+            }
+            x = boarderSize + i / size;
+        }
+        count++;
+        if (count % size == 0) {
+            x++;
+        }
+    }
+}
+
+void updateBoard() {
+    int index = 1;
+    for (int i = 0; i < size * size; i++) {
+        if (fillNum[i] == 1) {
+            if (numPick - 1 == i) {
+                printf("%3s ", "'O'");
+            } else {
+                printf("%3s ", "o");
+            }
+        } else if (fillNum[i] == -1) {
+            if (numPick - 1 == i) {
+                printf("%3s ", "'X'");
+            } else {
+                printf("%3s ", "x");
+            }
+        } else {
+            printf("%3d ", index);
+        }
+        index++;
+        if ((i + 1) % size == 0) {
+            printf("\n");
+        }
+    }
+    printf("\n");
+}
+
+void switchPlayer() {
+    if (player == 1) {
+        player = 2;
+    } else {
+        player = 1;
+    }
+}
+
+void setNum() {
+    if (player == 1) {
+        printf("enter a num: ");
+        scanf("%d", &numPick);
+        if (fillNum[numPick - 1] == 0) {
+            fillNum[numPick - 1] = 1;
+        } else {
+            do {
+                printf("enter a different num: ");
+                scanf("%d", &numPick);
+            } while (fillNum[numPick - 1] == 1 || fillNum[numPick - 1] == -1);
+            fillNum[numPick - 1] = 1;
+        }
+        printf("user picks %d\n", numPick);
+    } else {
+        numPick = getBestAdjacentNumber();
+        fillNum[numPick - 1] = -1;
+        printf("computer picks %d\n", numPick);
+    }
+}
+
+int getBestAdjacentNumber() {
+    int x;
+    int y;
+    // find the coordinate of numPick
+    for (int i = 0; i < LongSize; i++) {
+        for (int j = 0; j < LongSize; j++) {
+            if (initArray[i][j] == numPick) {
+                x = i;
+                y = j;
+            }
+        }
+    }
+
+    // insert adjacent numbers into the adjacentNumbers array
+    for (int i = x - 1; i <= x + 1; i++) {
+        for (int j = y - 1; j <= y + 1; j++) {
+            bool duplicate = false;
+            if (initArray[i][j] != numPick && initArray[i][j] > 0) {
+                for (int k = 0; k < numSeq; k++) {
+                    if (initArray[i][j] == adjacentNumbers[k]) {
+                        duplicate = true;
+                    }
+                }
+                if (duplicate == false) {
+                    adjacentNumbers[numSeq++] = initArray[i][j];
                 }
             }
         }
     }
-    return 1;
-}
-
-void north() {
-    for (int i = 0; i < bingo; i++) {
-        
+    printf("nearest numbers: ");
+    for (int i = 0; i < numSeq; i++) {
+        printf("%d ", adjacentNumbers[i]);
     }
+    printf("\n");
+
+    int nextNumIndex = rand() % numSeq;
+    printf("rand is %d\n", nextNumIndex);
+    return adjacentNumbers[nextNumIndex];
 }
