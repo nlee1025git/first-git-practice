@@ -12,13 +12,17 @@ int player;
 int numPick;
 int numSeq;
 int playCount;
+int highNum;
+int location;
 int fillNum[size * size];
 int playLineNums[size * size][adjacentLines][bingo + 2];
 int defaultLineNums[size * size][adjacentLines][bingo];
 int adjacentList[size * size][adjacentLines * (bingo - 1)];
 
 int getBestAdjacentNumber();
+void updateNode();
 int calculateComputerWeight(int i, int j);
+int calculateUserWeight(int i, int j);
 void updatePlay();
 void printAllAdjNums();
 void addAdjNums();
@@ -34,6 +38,14 @@ void initData();
 void countPlay();
 void switchPlayer();
 
+struct Node {
+    int data;
+    int key;
+    struct Node* next;
+};
+
+struct Node* head = NULL;
+
 int main() {
     initData();
     setDefaultLineNums();
@@ -45,6 +57,7 @@ int main() {
         printBoard();
         addAdjNums();
         printAllAdjNums();
+        // updateNode();
         updatePlay();
         switchPlayer();
         countPlay();
@@ -53,11 +66,23 @@ int main() {
 }
 
 int getBestAdjacentNumber() {
+    printf("high num is %d\n", highNum);
+    printf("location is %d\n", location);
     int num = rand() % 25 + 1;
     while (fillNum[num - 1] != 0) {
         num = rand() % 25 + 1;
     }
     return num;
+}
+
+void updateNode() {
+    // struct Node* link = (struct Node*) malloc(sizeof(struct Node));
+
+    head->data = 1;
+    head->next = NULL;
+    
+    printf("%d\n", head->data);
+    // printf("%s\n", head->next);
 }
 
 void updatePlay() {
@@ -73,18 +98,52 @@ void updatePlay() {
                 }
             }
             playLineNums[i][j][bingo] = calculateComputerWeight(i, j);
-            // playLineNums[i][j][bingo + 1] = ;
+            playLineNums[i][j][bingo + 1] = calculateUserWeight(i, j);
+            if (highNum < playLineNums[i][j][bingo]) {
+                highNum = playLineNums[i][j][bingo];
+                location = i + 1;
+            }
         }
     }
     for (int i = 0; i < size * size; i++) {
+        printf("           %d    cpu usr\n", i + 1);
         for (int j = 0; j < adjacentLines; j++) {
+            printf("line %d:", j + 1);
             for (int k = 0; k < bingo + 2; k++) {
-                printf("%2d ", playLineNums[i][j][k]);
+                if (k == bingo) {
+                    printf("%3d ", playLineNums[i][j][k]);
+                } else if (k == bingo + 1) {
+                    printf("%3d ", playLineNums[i][j][k]);                    
+                } else {
+                    printf("%2d ", playLineNums[i][j][k]);
+                }
             }
             printf("\n");
         }
         printf("\n");
     }
+}
+
+int calculateUserWeight(int i, int j) {
+    int oCount = 0;
+    int xCount = 0;
+    int nCount = 0;
+    int value = 0;
+    for (int k = 0; k < bingo; k++) {
+        if (playLineNums[i][j][k] == 1) {
+            oCount++;
+        } else if (playLineNums[i][j][k] == -1) {
+            xCount++;
+        } else {
+            nCount++;
+        }
+    }
+    if (player == 1) {
+        value = oCount * 2 + xCount * 3 + nCount;
+    } else if (player == 2) {
+        value = oCount * 3 + xCount * 2 + nCount;
+    }
+    return value;
 }
 
 int calculateComputerWeight(int i, int j) {
