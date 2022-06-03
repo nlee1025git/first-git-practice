@@ -12,17 +12,14 @@ int player;
 int numPick;
 int numSeq;
 int playCount;
-int highNum;
-int location;
 int fillNum[size * size];
 int playLineNums[size * size][adjacentLines][bingo + 2];
 int defaultLineNums[size * size][adjacentLines][bingo];
 int adjacentList[size * size][adjacentLines * (bingo - 1)];
 
 int getBestAdjacentNumber();
-void updateNode();
 int calculateComputerWeight(int i, int j);
-int calculateUserWeight(int i, int j);
+int calculateHighValue(int oCount, int xCount, int nCount, int max);
 void updatePlay();
 void printAllAdjNums();
 void addAdjNums();
@@ -38,14 +35,6 @@ void initData();
 void countPlay();
 void switchPlayer();
 
-struct Node {
-    int data;
-    int key;
-    struct Node* next;
-};
-
-struct Node* head = NULL;
-
 int main() {
     initData();
     setDefaultLineNums();
@@ -56,8 +45,7 @@ int main() {
         // printFillNum();
         printBoard();
         addAdjNums();
-        printAllAdjNums();
-        // updateNode();
+        // printAllAdjNums();
         updatePlay();
         switchPlayer();
         countPlay();
@@ -66,23 +54,23 @@ int main() {
 }
 
 int getBestAdjacentNumber() {
-    printf("high num is %d\n", highNum);
-    printf("location is %d\n", location);
-    int num = rand() % 25 + 1;
-    while (fillNum[num - 1] != 0) {
-        num = rand() % 25 + 1;
+    int num = -1;
+    int location = 0;
+    for (int i = 0; i < size * size; i++) {
+        int sum = 0;
+        if (fillNum[i] == 0) {
+            for (int j = 0; j < adjacentLines; j++) {
+                sum += playLineNums[i][j][bingo];
+            }
+            if (sum >= num) {
+                num = sum;
+                location = i + 1;
+                printf("num: %d, location: %d\n", num, location);
+            }
+        }
     }
-    return num;
-}
-
-void updateNode() {
-    // struct Node* link = (struct Node*) malloc(sizeof(struct Node));
-
-    head->data = 1;
-    head->next = NULL;
-    
-    printf("%d\n", head->data);
-    // printf("%s\n", head->next);
+    // printf("num: %d, location: %d\n", num, location);
+    return location;
 }
 
 void updatePlay() {
@@ -98,52 +86,19 @@ void updatePlay() {
                 }
             }
             playLineNums[i][j][bingo] = calculateComputerWeight(i, j);
-            playLineNums[i][j][bingo + 1] = calculateUserWeight(i, j);
-            if (highNum < playLineNums[i][j][bingo]) {
-                highNum = playLineNums[i][j][bingo];
-                location = i + 1;
-            }
+            // playLineNums[i][j][bingo + 1] = ;
         }
     }
-    for (int i = 0; i < size * size; i++) {
-        printf("           %d    cpu usr\n", i + 1);
-        for (int j = 0; j < adjacentLines; j++) {
-            printf("line %d:", j + 1);
-            for (int k = 0; k < bingo + 2; k++) {
-                if (k == bingo) {
-                    printf("%3d ", playLineNums[i][j][k]);
-                } else if (k == bingo + 1) {
-                    printf("%3d ", playLineNums[i][j][k]);                    
-                } else {
-                    printf("%2d ", playLineNums[i][j][k]);
-                }
-            }
-            printf("\n");
-        }
-        printf("\n");
-    }
-}
-
-int calculateUserWeight(int i, int j) {
-    int oCount = 0;
-    int xCount = 0;
-    int nCount = 0;
-    int value = 0;
-    for (int k = 0; k < bingo; k++) {
-        if (playLineNums[i][j][k] == 1) {
-            oCount++;
-        } else if (playLineNums[i][j][k] == -1) {
-            xCount++;
-        } else {
-            nCount++;
-        }
-    }
-    if (player == 1) {
-        value = oCount * 2 + xCount * 3 + nCount;
-    } else if (player == 2) {
-        value = oCount * 3 + xCount * 2 + nCount;
-    }
-    return value;
+    // // play board print
+    // for (int i = 0; i < size * size; i++) {
+    //     for (int j = 0; j < adjacentLines; j++) {
+    //         for (int k = 0; k < bingo + 2; k++) {
+    //             printf("%2d ", playLineNums[i][j][k]);
+    //         }
+    //         printf("\n");
+    //     }
+    //     printf("\n");
+    // }
 }
 
 int calculateComputerWeight(int i, int j) {
@@ -160,10 +115,51 @@ int calculateComputerWeight(int i, int j) {
             nCount++;
         }
     }
-    if (player == 1) {
-        value = oCount * 3 + xCount * 2 + nCount;
-    } else if (player == 2) {
-        value = oCount * 2 + xCount * 3 + nCount;
+    value = calculateHighValue(oCount, xCount, nCount, bingo);
+    return value;
+}
+
+int calculateHighValue(int oCount, int xCount, int nCount, int max) {
+    int value = 0;
+    // o = user, x = cpu
+    if (oCount + xCount + nCount == max) {
+        // do nothing
+    } else {
+        if (oCount > max || xCount > max || nCount > max) {
+            // any variable is bigger than max
+            return value;
+        }
+        // sum of three counts is less than or greater than max
+        return value;
+    }
+    if (oCount == 0 && xCount == max) {
+        // cpu put all five stones
+        value = 10000;
+    } else if (oCount == max && xCount == 0) {
+        // user put all five stones
+        value = 5000;
+    } else if (oCount == 0 && xCount == max - 1) {
+        // cpu put four stones and user has no stones
+        value = 1000;
+    } else if (oCount == max - 1 && xCount == 0) {
+        // user put four stones and cpu has no stones
+        value = 800;
+    } else if (oCount == 0 && xCount == max - 2) {
+        // cpu put three stones and user has no stones
+        value = 500;
+    } else if (oCount == max - 2 && xCount == 0) {
+        // user put three stones and cpu has no stones
+        value = 400;
+    } else if (oCount == 0 && xCount > 0) {
+        // cpu put more than one stone and user has no stones
+        value = xCount * 10;
+    } else if (oCount > 0 && xCount == 0) {
+        // user put more than one stone and cpu has no stones
+        value = oCount * 5;
+    } else {
+        // user and cpus have no stones
+        value = 0;
+        // printf("oCount: %d, xCount: %d, nCount: %d, value is %d\n", oCount, xCount, nCount, value);
     }
     return value;
 }
