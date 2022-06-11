@@ -4,8 +4,8 @@
 #include <stdbool.h>
 #include <string.h>
 
-#define bingo 3
-#define size 5
+#define bingo 6
+#define size 8
 #define adjacentLines 8
 
 int player;
@@ -18,6 +18,7 @@ int defaultLineNums[size * size][adjacentLines][bingo];
 int adjacentList[size * size][adjacentLines * (bingo - 1)];
 int adjacentNums[size * size];
 
+int findAngle(int k);
 int getBestAdjacentNumber();
 int newCalHighVal(int stoneCount, int gapCount, int innerGapCount);
 int calculateWeight(int i, int j);
@@ -155,16 +156,65 @@ void updatePlay() {
         }
     }
     // print play board
+    int maxPos = -10000;
+    int maxNeg = 10000;
+    int maxPos_i = -1;
+    int maxPos_j = -1;
+    int maxPos_k = -1;
+    int maxNeg_i = -1;
+    int maxNeg_j = -1;
+    int maxNeg_k = -1;
     for (int i = 0; i < size * size; i++) {
-        printf("   %d\n", i + 1);
-        for (int j = 0; j < adjacentLines; j++) {
-            for (int k = 0; k < bingo + 2; k++) {
-                printf("%2d ", playLineNums[i][j][k]);
+        if (i == 0) {
+            printf("   %d\n", i + 1);
+            for (int j = 0; j < adjacentLines; j++) {
+                for (int k = 0; k < bingo + 2; k++) {
+                    printf("%2d ", playLineNums[i][j][k]);
+                }
+                printf("\n");
+                if (maxPos < playLineNums[i][j][bingo + 1]) {
+                    maxPos_i = i;
+                    maxPos_j = j;
+                    maxPos = playLineNums[i][j][bingo + 1];
+                }
+                if (maxNeg > playLineNums[i][j][bingo]) {
+                    maxNeg_i = i;
+                    maxNeg_j = j;
+                    maxNeg = playLineNums[i][j][bingo];
+                }
             }
             printf("\n");
+            printf("maxPos_i: %d, maxPos_j: %d degree, maxValue: %d\n", maxPos_i + 1, findAngle(maxPos_j), maxPos);
+            printf("maxNeg_i: %d, maxNeg_j: %d degree, maxValue: %d\n", maxNeg_i + 1, findAngle(maxNeg_j), maxNeg);
+            for (int k = 0; k < bingo; k++) {
+                if (playLineNums[maxPos_i][maxPos_j][k] == 0) {
+                    printf("%d, %d\n", defaultLineNums[maxPos_i][maxPos_j][k], playLineNums[maxPos_i][maxPos_j][k]);
+                }
+            }
         }
-        printf("\n");
     }
+}
+
+int findAngle(int k) {
+    int result = 0;
+    if (k == 0) {
+        result = 0;
+    } else if (k == 1) {
+        result = 315;
+    } else if (k == 2) {
+        result = 270;
+    } else if (k == 3) {
+        result = 225;
+    } else if (k == 4) {
+        result = 180;
+    } else if (k == 5) {
+        result = 135;
+    } else if (k == 6) {
+        result = 90;
+    } else if (k == 7) {
+        result = 45;
+    }
+    return result;
 }
 
 int calculateWeight(int i, int j) {
@@ -172,6 +222,7 @@ int calculateWeight(int i, int j) {
     int gapCount = 0;
     int innerGapCount = 0;
     int value = 0;
+    int tempInnerCount = 0;
 
     // to distinguish gap count and innerGap count
     bool isStone = false;
@@ -183,47 +234,70 @@ int calculateWeight(int i, int j) {
     }
     for (int k = 0; k < bingo; k++) {
         // if killValue is found, return 0
-        if (playLineNums[i][j][k] == killValue) {
+        if (playLineNums[i][j][k] == killValue) {   //opponemt
             return value;
-        }
-        if (playLineNums[i][j][k] == -killValue) {
+        } else if (playLineNums[i][j][k] == -killValue) { //same plahyer
             stoneCount++;
+            innerGapCount += tempInnerCount;
+            tempInnerCount = 0;
             if (isStone == false) {
-                isStone == true;
-            } else {
-                isStone = false;
+                isStone = true;
             }
-        } else {
+        } else if (playLineNums[i][j][k] == 0) {
+            // no 'x' = -1 or 'o' = 1   gap = 0   // empty
             gapCount++;
             if (isStone == true) {
-                innerGapCount++;
+                tempInnerCount++;
             }
         }
     }
-    // printf("i: %d, j: %d\n", i, j);
-    // printf("stone: %d, gap: %d, innerGap: %d\n", stoneCount, gapCount, innerGapCount);
+    if (i == 0) {
+        for (int k = 0; k < bingo; k++) {
+            printf("%d, %d\n", defaultLineNums[i][j][k], playLineNums[i][j][k]);
+        }
+        printf("i: %d, j: %d\n", i + 1, j + 1);
+        printf("stone: %d, gap: %d, innerGap: %d\n\n", stoneCount, gapCount, innerGapCount);
+    }
+    // TODO: remove nonnecessary lines
     value = newCalHighVal(stoneCount, gapCount, innerGapCount);
     return value;
 }
 
 int newCalHighVal(int stoneCount, int gapCount, int innerGapCount) {
     int value = 0;
-    if (gapCount == size) {
+    if (gapCount == bingo) {
         return value;
     }
-    if (stoneCount == bingo && gapCount == 0 && innerGapCount == 0) {
-        value = 800;
-    } else if (stoneCount == bingo - 1 && gapCount == 1 && innerGapCount == 0) {
-        value = 600;
-    } else if (stoneCount == bingo - 1 && gapCount == 1 && innerGapCount == 1) {
-        value = 500;
-    // [' ', 'X', ' ']
-    } else if (stoneCount == bingo - 2 && gapCount == 2 && innerGapCount == 0) {
-        value = 300;
-    // ['X', ' ', ' '] or [' ', ' ', 'X']
-    } else if (stoneCount == bingo - 2 && gapCount == 2 && innerGapCount == 0) {
-        value = 200;
+    // stone = 1000, no gap = 500, innerGap = 20
+    // if (stoneCount == bingo && gapCount == 0 && innerGapCount == 0) {
+    //     value = stoneCount * 1000;
+    // }
+    if (gapCount == 0) {
+        value = stoneCount * 1000 + 500;
+    } else {
+        value = stoneCount * 1000 + 500 - innerGapCount * 20;
     }
+    // for (int i = bingo; i > 0; i--) {
+    //     if (stoneCount == bingo) {
+    //         value = stoneCount * 1000;
+    //     } else if (innerGapCount == 0) {
+    //         value = stoneCount * 1000 + 500;
+    //     } else {
+    //         value = stoneCount * 1000 + 500 - innerGapCount * 20;
+    //     }
+    // }
+
+    // } else if (stoneCount == bingo - 1 && gapCount == 1 && innerGapCount == 0) {
+    //     value = 600;
+    // } else if (stoneCount == bingo - 1 && gapCount == 1 && innerGapCount == 1) {
+    //     value = 500;
+    // // [' ', 'X', ' ']
+    // } else if (stoneCount == bingo - 2 && gapCount == 2 && innerGapCount == 0) {
+    //     value = 300;
+    // // ['X', ' ', ' '] or [' ', ' ', 'X']
+    // } else if (stoneCount == bingo - 2 && gapCount == 2 && innerGapCount == 0) {
+    //     value = 200;
+    // }
     // for (int i = size; i > 0; i--) {
     //     if (stoneCount == i) {
     //         value = 100 * i;
