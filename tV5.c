@@ -16,9 +16,11 @@ int fillNum[size * size];
 int playLineNums[size * size][adjacentLines][bingo + 2];
 int defaultLineNums[size * size][adjacentLines][bingo];
 int adjacentList[size * size][adjacentLines * (bingo - 1)];
+int adjacentNums[size * size];
 
 int getBestAdjacentNumber();
-int calculateComputerWeight(int i, int j);
+int newCalHighVal(int stoneCount, int gapCount, int innerGapCount);
+int calculateWeight(int i, int j);
 int calculateHighValue(int oCount, int xCount, int nCount, int max);
 void updatePlay();
 void printAllAdjNums();
@@ -34,6 +36,40 @@ void setNum();
 void initData();
 void countPlay();
 void switchPlayer();
+
+int nodeCount = 0;
+
+struct Node {
+    int myNum;  // board number
+    int sumScore; // lines 1 - 8
+    struct Node* next;
+};
+
+struct Node* head = NULL;
+
+bool isEmpty() {
+    return nodeCount == 0;
+}
+
+bool isFull() {
+    return nodeCount == size * size;
+}
+
+int nodeSize() {
+    return nodeCount;
+}
+
+void enqueue(struct Node* element) {
+    if (isFull()) {
+        printf("node is full");
+    } else {
+        nodeCount++;
+        head->myNum = numPick;
+        // head->sumScore = sumScores();
+        head->next = NULL;
+        
+    }
+}
 
 int main() {
     initData();
@@ -54,23 +90,47 @@ int main() {
 }
 
 int getBestAdjacentNumber() {
-    int num = -1;
-    int location = 0;
-    for (int i = 0; i < size * size; i++) {
-        int sum = 0;
-        if (fillNum[i] == 0) {
-            for (int j = 0; j < adjacentLines; j++) {
-                sum += playLineNums[i][j][bingo];
-            }
-            if (sum >= num) {
-                num = sum;
-                location = i + 1;
-                printf("num: %d, location: %d\n", num, location);
-            }
+    if (playCount == 0) {
+        if (size * size / 2 == 1) {
+            return size * size / 2 + 1;
+        } else {
+            int startNums[4];
+            startNums[0] = size * (size / 2 - 1) + size / 2;
+            startNums[1] = startNums[0] + 1;
+            startNums[2] = startNums[0] + size;
+            startNums[3] = startNums[2] + 1;
+            int rtn = rand() % 4;
+            return startNums[rtn];
         }
+    } else {
+        int num = rand() % (size * size) + 1;
+        while (fillNum[num - 1] != 0) {
+            num = rand() % (size * size) + 1;
+        }
+        return num;
+        // int num = -1;
+        // int location = 0;
+        // printAllAdjNums();
+        // for (int i = 0; i < size * size; i++) {
+        //     int sum = 0;
+        //     for (int j = 0; j < adjacentLines * (bingo - 1); j++) {
+        //         if (adjacentList[i][j] > 0) {
+        //             printf("%d ", adjacentList[i][j]);
+        //             for (int k = 0; k < adjacentLines; k++) {
+        //                 // sum += playLineNums[adjacentList[i][j]][k][bingo + 1];
+        //                 sum += playLineNums[adjacentList[i][j]][k][bingo];
+        //             }
+        //         }
+        //     }
+        //     if (sum >= num) {
+        //         num = sum;
+        //         location = i + 1;
+        //         printf("num: %d, location: %d\n", num, location);
+        //     }
+        //     printf("\n");
+        // }
+        // return location;
     }
-    // printf("num: %d, location: %d\n", num, location);
-    return location;
 }
 
 void updatePlay() {
@@ -85,37 +145,90 @@ void updatePlay() {
                     }
                 }
             }
-            playLineNums[i][j][bingo] = calculateComputerWeight(i, j);
-            // playLineNums[i][j][bingo + 1] = ;
+            if (player == 1) {
+                playLineNums[i][j][bingo + 1] = calculateWeight(i, j);      // user
+                playLineNums[i][j][bingo] = -playLineNums[i][j][bingo + 1]; // cpu
+            } else {
+                playLineNums[i][j][bingo] = calculateWeight(i, j);           // cpu
+                playLineNums[i][j][bingo + 1] = -playLineNums[i][j][bingo]; // user
+            }
         }
     }
-    // // play board print
-    // for (int i = 0; i < size * size; i++) {
-    //     for (int j = 0; j < adjacentLines; j++) {
-    //         for (int k = 0; k < bingo + 2; k++) {
-    //             printf("%2d ", playLineNums[i][j][k]);
-    //         }
-    //         printf("\n");
-    //     }
-    //     printf("\n");
-    // }
+    // print play board
+    for (int i = 0; i < size * size; i++) {
+        printf("   %d\n", i + 1);
+        for (int j = 0; j < adjacentLines; j++) {
+            for (int k = 0; k < bingo + 2; k++) {
+                printf("%2d ", playLineNums[i][j][k]);
+            }
+            printf("\n");
+        }
+        printf("\n");
+    }
 }
 
-int calculateComputerWeight(int i, int j) {
-    int oCount = 0;
-    int xCount = 0;
-    int nCount = 0;
+int calculateWeight(int i, int j) {
+    int stoneCount = 0;
+    int gapCount = 0;
+    int innerGapCount = 0;
     int value = 0;
+
+    // to distinguish gap count and innerGap count
+    bool isStone = false;
+
+    // killValue is used to find the opponent stone in a line
+    int killValue = 1;
+    if (player == 1) {
+        killValue = -1;
+    }
     for (int k = 0; k < bingo; k++) {
-        if (playLineNums[i][j][k] == 1) {
-            oCount++;
-        } else if (playLineNums[i][j][k] == -1) {
-            xCount++;
+        // if killValue is found, return 0
+        if (playLineNums[i][j][k] == killValue) {
+            return value;
+        }
+        if (playLineNums[i][j][k] == -killValue) {
+            stoneCount++;
+            if (isStone == false) {
+                isStone == true;
+            } else {
+                isStone = false;
+            }
         } else {
-            nCount++;
+            gapCount++;
+            if (isStone == true) {
+                innerGapCount++;
+            }
         }
     }
-    value = calculateHighValue(oCount, xCount, nCount, bingo);
+    // printf("i: %d, j: %d\n", i, j);
+    // printf("stone: %d, gap: %d, innerGap: %d\n", stoneCount, gapCount, innerGapCount);
+    value = newCalHighVal(stoneCount, gapCount, innerGapCount);
+    return value;
+}
+
+int newCalHighVal(int stoneCount, int gapCount, int innerGapCount) {
+    int value = 0;
+    if (gapCount == size) {
+        return value;
+    }
+    if (stoneCount == bingo && gapCount == 0 && innerGapCount == 0) {
+        value = 800;
+    } else if (stoneCount == bingo - 1 && gapCount == 1 && innerGapCount == 0) {
+        value = 600;
+    } else if (stoneCount == bingo - 1 && gapCount == 1 && innerGapCount == 1) {
+        value = 500;
+    // [' ', 'X', ' ']
+    } else if (stoneCount == bingo - 2 && gapCount == 2 && innerGapCount == 0) {
+        value = 300;
+    // ['X', ' ', ' '] or [' ', ' ', 'X']
+    } else if (stoneCount == bingo - 2 && gapCount == 2 && innerGapCount == 0) {
+        value = 200;
+    }
+    // for (int i = size; i > 0; i--) {
+    //     if (stoneCount == i) {
+    //         value = 100 * i;
+    //     }
+    // }
     return value;
 }
 
@@ -133,10 +246,10 @@ int calculateHighValue(int oCount, int xCount, int nCount, int max) {
         return value;
     }
     if (oCount == 0 && xCount == max) {
-        // cpu put all five stones
+        // cpu put five stones
         value = 10000;
     } else if (oCount == max && xCount == 0) {
-        // user put all five stones
+        // user put five stones
         value = 5000;
     } else if (oCount == 0 && xCount == max - 1) {
         // cpu put four stones and user has no stones
