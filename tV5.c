@@ -5,7 +5,7 @@
 #include <string.h>
 
 #define bingo 5
-#define size 10
+#define size 8
 #define adjacentLines 8
 
 int player;
@@ -17,6 +17,7 @@ int defaultLineNums[size * size][adjacentLines][bingo];
 int adjacentList[size * size][adjacentLines * (bingo - 1)];
 int bestPossibleNums[adjacentLines * (bingo - 1)];
 int totalScore[size * size][2];
+int adjFillList[size * size] = {};
 
 void calculateTotalScore();
 void printTotalScore();
@@ -42,6 +43,7 @@ void setNum();
 void initData();
 void countPlay();
 void switchPlayer();
+void printAdjNums();
 
 int main() {
     srand(time(0));
@@ -54,8 +56,8 @@ int main() {
         addAdjNums();
         updatePlay();
         calculateTotalScore();
-        printTotalScore();
-        printNumScore();
+        // printTotalScore();
+        // printNumScore();
         switchPlayer();
         countPlay();
     }
@@ -76,74 +78,59 @@ int getBestAdjacentNumber() {
             return startNums[rtn];
         }
     } else {
-        resetNextNums();
-        setNextNums();
-        if (bestPossibleNums[0] != 0) {
-            printf("best numbers to pick: ");
-            int location = 0;
-            for (int i = 0; i < adjacentLines * (bingo - 1); i++) {
-                if (bestPossibleNums[i] != 0) {
-                    printf("%d ", bestPossibleNums[i]);
-                    location = i;
-                }
-            }
-            printf("\n");
-
-            int nextNums[8];
-            int count = 0;
-            int row = 1;
-            printf("next numbers to pick: ");
-            for (int i = 0; i < 9; i++) {
-                if (i == 4) {
-                    count++;
-                    continue;
-                }
-                nextNums[i] = numPick - (size * row)  - 1 + (i % 3);
-                printf("%d ", nextNums[i]);
+        printAdjNums();
+        int count = 0;
+        printf("adjacent numbers: ");
+        for (int i = 0; i < size * size; i++) {
+            int temp = adjFillList[i + 1];
+            if (temp > 0) {
                 count++;
-                if (count == 3) {
-                    row--;
-                    count = 0;
+            }
+        }
+
+        int adjNums[count];
+        int index = 0;
+        for (int i = 0; i < size * size; i++) {
+            int temp = adjFillList[i + 1];
+            if (temp > 0) {
+                adjNums[index++] = temp;
+            }
+        }
+        for (int i = 0; i < count - 1; i++) {
+            printf("%d ", adjNums[i]);
+        }
+        printf("\n");
+
+        int num = rand() % count;
+        return adjNums[num];
+    }
+}
+
+void printAdjNums() {
+    printf("o = user, x = cpu\n");
+    for (int i = 0; i < size * size; i++) {
+        bool check = false;
+        if (fillNum[i] == 1) {
+            if (adjacentList[i][adjacentLines * (bingo - 1) - 1] != 0) {
+                printf("%2d [o]: ", i + 1);
+                check = true;
+            }
+        } else if (fillNum[i] == -1) {
+            if (adjacentList[i][adjacentLines * (bingo - 1) - 1] != 0) {
+                printf("%2d [x]: ", i + 1);
+                check = true;
+            }
+        }
+        if (check == true) {
+            for (int j = 0; j < adjacentLines * (bingo - 1); j++) {
+                if (adjacentList[i][j] > 0) {
+                    printf("%d ", adjacentList[i][j]);
                 }
             }
             printf("\n");
-            
-            int same = 0;
-            for (int i = 0; i < adjacentLines * (bingo - 1); i++) {
-                for (int j = 0; j < 8; j++) {
-                    if (bestPossibleNums[i] != 0 && nextNums[j] != 0) {
-                        if (bestPossibleNums[i] == nextNums[j]) {
-                            same++;
-                        }
-                    }
-                }
-            }
-
-            int finalNums[same];
-            int ind = 0;
-            printf("final numbers to pick: ");
-            for (int i = 0; i < adjacentLines * (bingo - 1); i++) {
-                for (int j = 0; j < 8; j++) {
-                    if (bestPossibleNums[i] != 0 && nextNums[j] != 0) {
-                        if (bestPossibleNums[i] == nextNums[j]) {
-                            finalNums[ind++] = nextNums[j];
-                            printf("%d ", finalNums[ind - 1]);
-                        }
-                    }
-                }
-            }
-            printf("\n");
-
-            int random = rand() % same;
-            return finalNums[random];
-        } else {
-            int num = rand() % (size * size) + 1;
-            while (fillNum[num - 1] != 0) {
-                num = rand() % (size * size) + 1;
-            }
-            return num;
         }
     }
+    printf("\n");
 }
 
 void setNextNums() {
@@ -209,12 +196,14 @@ void calculateTotalScore() {
 }
 
 void printTotalScore() {
-    printf("     cpu user\n");
+    printf("     cpu user diff\n");
     for (int i = 0; i < size * size; i++) {
         printf("%2d: ", i + 1);
         for (int j = 0; j < 2; j++) {
             printf("%4d ", totalScore[i][j]);
         }
+        int diff = totalScore[i][1] - totalScore[i][0];
+        printf("%4d", diff);
         printf("\n");
     }
     printf("\n");
@@ -556,6 +545,36 @@ void setNum() {
         fillNum[numPick - 1] = -1;
         printf("\ncomputer picks %d\n", numPick);
     }
+    
+    int count = 0;
+    int row = 1;
+    for (int i = 0; i < 9; i++) {
+        int temp = numPick - (size * row) - 1 + (i % 3);
+        if (i != 4 && adjFillList[temp] != -1) {
+            if (((numPick - 1) % size != 0 || (i) % 3 != 0) &&
+                (numPick % size != 0 || (i - 2) % 3 != 0)) {
+                adjFillList[temp] = temp;
+            }
+        } else {
+            adjFillList[temp] = -1;
+        }
+        count++;
+        if (count % 3 == 0) {
+            row--;
+        }
+    }
+    
+    count = 0;
+    for (int i = 0; i < size * size; i++) {
+        int temp = adjFillList[i + 1];
+        printf("%3d ", temp);
+        count++;
+        if (count == size) {
+            printf("\n");
+            count = 0;
+        }
+    }
+    printf("\n");
 }
 
 void initData() {
