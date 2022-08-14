@@ -5,7 +5,7 @@
 #include <string.h>
 
 #define bingo 5
-#define size 8
+#define size 12
 #define adjacentLines 8
 
 int player;
@@ -96,13 +96,20 @@ int getBestAdjacentNumber() {
                 adjNums[index++] = temp;
             }
         }
-        for (int i = 0; i < count - 1; i++) {
-            printf("%d ", adjNums[i]);
+        int max = 0;
+        int location = 0;
+        printf("\n");
+        for (int i = 0; i < count; i++) {
+            // printf("%d \n", adjNums[i]);
+            printf("%d(i)- %d:%d,%d\n", i + 1, adjNums[i], totalScore[adjNums[i] - 1][0], totalScore[adjNums[i] - 1][1]);
+            if (totalScore[adjNums[i] - 1][1] > max) {
+                max = totalScore[adjNums[i] - 1][1];
+                location = i;
+                printf("max:%d %d\n", max, adjNums[location]);
+            }
         }
         printf("\n");
-
-        int num = rand() % count;
-        return adjNums[num];
+        return adjNums[location];
     }
 }
 
@@ -183,15 +190,18 @@ void calculateTotalScore() {
             int cpuSum = 0;
             int userSum = 0;
             for (int j = 0; j < adjacentLines; j++) {
+                // printf("%d %d %d %d\n", i + 1, j, playLineNums[i][j][bingo], playLineNums[i][j][bingo + 1]);
                 cpuSum += playLineNums[i][j][bingo];
                 userSum += playLineNums[i][j][bingo + 1];
             }
             totalScore[i][0] = cpuSum;
             totalScore[i][1] = userSum;
+            // printf("%d - %d(%d,%d)\n", i + 1, fillNum[i + 1], totalScore[i + 1][0], totalScore[i][1]);
         } else {
             totalScore[i][0] = 0;
             totalScore[i][1] = 0;
         }
+        // printf("%d - %d(%d,%d)\n", i + 1, fillNum[i + 1], totalScore[i + 1][0], totalScore[i][1]);
     }
 }
 
@@ -354,10 +364,11 @@ int calculateHighValue(int stoneCount, int gapCount, int innerGapCount) {
     }
     // stone = 1000, no gap = 500, innerGap = 20
     if (gapCount == 0) {
-        value = stoneCount * 1000 + 500;
+        value = stoneCount * 5000 + 500;
     } else {
-        value = stoneCount * 1000 + 500 - innerGapCount * 20;
+        value = stoneCount * 3000 + 500 - innerGapCount * 20;
     }
+    // printf("stoneCount:%d %d gapCount: %d\n", stoneCount, value, gapCount);
     return value;
 }
 
