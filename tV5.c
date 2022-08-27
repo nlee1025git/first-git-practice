@@ -19,12 +19,12 @@ int bestPossibleNums[adjacentLines * (bingo - 1)];
 int totalScore[size * size][2];
 int adjFillList[size * size] = {};
 
+int receiveANum();
 void calculateTotalScore();
 void printTotalScore();
 void printNumScore();
 void resetNextNums();
 void setNextNums();
-int findAngle(int j);
 int getBestAdjacentNumber();
 int calculateHighValue(int stoneCount, int gapCount, int innerGapCount);
 int calculateUserWeight(int i, int j);
@@ -44,6 +44,9 @@ void initData();
 void countPlay();
 void switchPlayer();
 void printAdjNums();
+void printSpot();
+void printAdjBoard();
+void printNumBoard();
 
 int main() {
     srand(time(0));
@@ -51,17 +54,26 @@ int main() {
     setDefaultLineNums();
 
     while (1) {
-        setNum();
-        printBoard();
-        addAdjNums();
-        updatePlay();
-        calculateTotalScore();
-        // printTotalScore();
-        // printNumScore();
-        switchPlayer();
-        countPlay();
+        // numPick = receiveANum();
+        // if (numPick > 10000) {
+        //     printSpot();
+        // } else {
+            setNum();
+            printBoard();
+            addAdjNums();
+            updatePlay();
+            calculateTotalScore();
+            // printTotalScore();
+            // printNumScore();
+            switchPlayer();
+            countPlay();
+        // }
     }
     return 0;
+}
+
+void printSpot() {
+    printf("test line\n");
 }
 
 int getBestAdjacentNumber() {
@@ -101,14 +113,14 @@ int getBestAdjacentNumber() {
         printf("\n");
         for (int i = 0; i < count; i++) {
             // printf("%d \n", adjNums[i]);
-            printf("%d(i)- %d:%d,%d\n", i + 1, adjNums[i], totalScore[adjNums[i] - 1][0], totalScore[adjNums[i] - 1][1]);
+            printf("%2d(i)- %2d: %4d,%4d\n", i + 1, adjNums[i], totalScore[adjNums[i] - 1][0], totalScore[adjNums[i] - 1][1]);
             if (totalScore[adjNums[i] - 1][1] > max) {
                 max = totalScore[adjNums[i] - 1][1];
                 location = i;
-                printf("max:%d %d\n", max, adjNums[location]);
             }
         }
         printf("\n");
+        printf("max:%d %d\n", max, adjNums[location]);
         return adjNums[location];
     }
 }
@@ -168,8 +180,8 @@ void updatePlay() {
                     }
                 }
                 if (defaultLineNums[i][j][k] == 0) {
-                    playLineNums[i][j][bingo] = -10;        // cpu
-                    playLineNums[i][j][bingo + 1] = -10;    // user
+                    playLineNums[i][j][bingo] = -1;        // cpu
+                    playLineNums[i][j][bingo + 1] = -1;    // user
                 } else {
                     if (player == 1) {
                         playLineNums[i][j][bingo] = calculateCpuWeight(i, j);
@@ -185,12 +197,22 @@ void updatePlay() {
 }
 
 void calculateTotalScore() {
+    printf("this must print 1111111\n");
+    printf("fillNum[numPick] = %d\n", fillNum[numPick]);
+    printf("fillNum[numPick - 1] = %d\n", fillNum[numPick - 1]);
     for (int i = 0; i < size * size; i++) {
         if (fillNum[i] == 0) {
             int cpuSum = 0;
             int userSum = 0;
+            if (i + 1 == numPick) {
+                printf("this must print 222222\n");
+            }
             for (int j = 0; j < adjacentLines; j++) {
-                // printf("%d %d %d %d\n", i + 1, j, playLineNums[i][j][bingo], playLineNums[i][j][bingo + 1]);
+                if (i + 1 == numPick) {
+                    printf("this must print 333333\n");
+                    printf("%2d-%d: %4d %4d\n", i, j, playLineNums[i][j][bingo], playLineNums[i][j][bingo + 1]);
+                }
+                // printf("%2d %d %4d %4d\n", i + 1, j, playLineNums[i][j][bingo], playLineNums[i][j][bingo + 1]);
                 cpuSum += playLineNums[i][j][bingo];
                 userSum += playLineNums[i][j][bingo + 1];
             }
@@ -259,28 +281,6 @@ void resetNextNums() {
     for (int i = 0; i < adjacentLines * (bingo - 1); i++) {
         bestPossibleNums[i] = 0;
     }
-}
-
-int findAngle(int j) {
-    int result = 0;
-    if (j == 0) {
-        result = 0;
-    } else if (j == 1) {
-        result = 315;
-    } else if (j == 2) {
-        result = 270;
-    } else if (j == 3) {
-        result = 225;
-    } else if (j == 4) {
-        result = 180;
-    } else if (j == 5) {
-        result = 135;
-    } else if (j == 6) {
-        result = 90;
-    } else if (j == 7) {
-        result = 45;
-    }
-    return result;
 }
 
 int calculateCpuWeight(int i, int j) {
@@ -537,26 +537,80 @@ void printBoard() {
     printf("\n");
 }
 
-void setNum() {
-    if (player == 1) {
-        printf("\nenter a num: ");
-        scanf("%d", &numPick);
-        if (fillNum[numPick - 1] == 0) {
-            fillNum[numPick - 1] = 1;
-        } else {
-            do {
-                printf("enter a different num: ");
-                scanf("%d", &numPick);
-            } while (fillNum[numPick - 1] == 1 || fillNum[numPick - 1] == -1);
-            fillNum[numPick - 1] = 1;
+// int receiveANum() {
+//     printf("\n[user] enter a num\n");
+//     printf("or to print enter number + 10000: ");
+//     scanf("%d", &numPick);
+//     return numPick;
+// }
+
+void printNumBoard() {
+    printf("num: %d\n", numPick);
+    for (int i = 0; i < size * size; i++) {
+        for (int j = 0; j < adjacentLines; j++) {
+            for (int k = 0; k < bingo + 2; k++) {
+                printf("%d ", playLineNums[i][j][k]);
+            }
         }
-        printf("user picks %d\n", numPick);
+        printf("\n");
+    }
+    printf("\n");
+    // for (int i = 0; i < 8; i++) {
+    //     printf("%d-%d: (%d,%d)\n", numPick, i, playLineNums[numPick - 1][0], totalScore[numPick - 1][1]);
+    // }
+}
+
+void setNum() {
+    int temp = 0;
+    int foundSlot = 0;
+    char* name = "user";
+    if (player == 1) {
+        printf("\n[%s turn] enter a number\n", name);
+        printf("or add 10000 to the number to print: ");
+        scanf("%d", &temp);
+        do {
+            if (temp > 0 && temp <= size * size) {
+                if (fillNum[temp - 1] == 0) {
+                    foundSlot = 1;
+                }
+            }
+            if (temp > 10000 && temp <= 10000 + size * size) {
+                numPick = temp - 10000;
+                printNumBoard();
+            }
+            if (foundSlot == 0) {
+                printf("\n[%s turn] enter a different number\n", name);
+                printf("or add 10000 to the number to print: ");
+                scanf("%d", &temp);
+            }
+        } while (foundSlot != 1);
+        fillNum[temp - 1] = 1;
+        printf("\nuser picks %d\n", temp);
     } else if (player == 2) {
+        name = "cpu";
+        printf("\n[%s turn] enter negative number to continue\n", name);
+        printf("or add 10000 to the number to print: ");
+        scanf("%d", &temp);
+        do {
+            if (temp < 0) {
+                foundSlot = 1;
+            } else {
+                if (temp > 10000 && temp <= 10000 + size * size) {
+                    numPick = temp - 10000;
+                    printNumBoard();
+                }
+                printf("\n[%s turn] enter negative number to continue\n", name);
+                printf("or add 10000 to the number to print: ");
+                scanf("%d", &temp);
+            }
+        } while (foundSlot != 1);
         numPick = getBestAdjacentNumber();
         fillNum[numPick - 1] = -1;
         printf("\ncomputer picks %d\n", numPick);
     }
-    
+}
+
+void printAdjBoard() {
     int count = 0;
     int row = 1;
     for (int i = 0; i < 9; i++) {
@@ -596,7 +650,8 @@ void initData() {
 
 void countPlay() {
     playCount++;
-    if (playCount == size * size) {
+    // if (playCount == size * size) {
+    if (playCount == 5) {
         printf("draw game\n");
         exit(1);
     }
