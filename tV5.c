@@ -197,22 +197,13 @@ void updatePlay() {
 }
 
 void calculateTotalScore() {
-    printf("this must print 1111111\n");
-    printf("fillNum[numPick] = %d\n", fillNum[numPick]);
-    printf("fillNum[numPick - 1] = %d\n", fillNum[numPick - 1]);
     for (int i = 0; i < size * size; i++) {
         if (fillNum[i] == 0) {
             int cpuSum = 0;
             int userSum = 0;
             if (i + 1 == numPick) {
-                printf("this must print 222222\n");
             }
             for (int j = 0; j < adjacentLines; j++) {
-                if (i + 1 == numPick) {
-                    printf("this must print 333333\n");
-                    printf("%2d-%d: %4d %4d\n", i, j, playLineNums[i][j][bingo], playLineNums[i][j][bingo + 1]);
-                }
-                // printf("%2d %d %4d %4d\n", i + 1, j, playLineNums[i][j][bingo], playLineNums[i][j][bingo + 1]);
                 cpuSum += playLineNums[i][j][bingo];
                 userSum += playLineNums[i][j][bingo + 1];
             }
